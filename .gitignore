@@ -3,6 +3,9 @@ dist/
 .rn_temp/
 node_modules/
 .DS_Store
+package-lock.json
+/dist
+/.idea
 .idea
 node_modules
 /dist
@@ -13,5 +16,7 @@ package-lock.json
 /api_mapping.js
 Thumbs.db
 report.*.json
+
+
 
 

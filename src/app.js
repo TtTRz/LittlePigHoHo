@@ -1,12 +1,21 @@
 import '@tarojs/async-await'
 import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
+import 'taro-ui/dist/style/index.scss'
 
 import Index from './pages/index'
 
-import configStore from './store'
+import dva from './utils/dva'
+import models from './models'
 
-import './app.scss'
+const dvaApp = dva.createApp({
+  initialState: {
+
+  },
+  models: models,
+});
+
+const store = dvaApp.getStore();
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -14,13 +23,14 @@ import './app.scss'
 //   require('nerv-devtools')
 // }
 
-const store = configStore()
 
 class App extends Component {
 
   config = {
     pages: [
-      'pages/index/index'
+      'pages/home/welcome/welcome_view',
+      // 'pages/home/home_view',
+      // 'pages/index/index',
     ],
     window: {
       backgroundTextStyle: 'light',
