@@ -1,13 +1,8 @@
 import Taro from '@tarojs/taro';
+
 import { baseUrl, noConsole } from '../config';
 
-
-const request_data = {
-  platform: 'wap',
-  rent_mode: 2,
-};
-
-export default (options = { method: 'GET', data: {} }) => {
+export default (options = { method: 'GET', data: {}, header: null }) => {
   if(!noConsole) {
     console.log(
       `${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(
@@ -18,13 +13,12 @@ export default (options = { method: 'GET', data: {} }) => {
   return Taro.request({
     url: baseUrl + options.url,
     data: {
-      ...request_data,
       ...options.data,
     },
     header: {
       'Content-Type': 'application/json',
       'hoho-auth-model': 'client',
-      'hoho_auth_token': Taro.getStorageSync('token')
+      'hoho-auth-token': options.header !== null ? options.header : Taro.getStorageSync('token')
     },
     method: options.method.toUpperCase(),
   }).then(res => {

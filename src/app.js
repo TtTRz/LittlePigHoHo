@@ -29,8 +29,8 @@ class App extends Component {
   config = {
     pages: [
       'pages/home/welcome/welcome_view',
-      // 'pages/home/home_view',
-      // 'pages/index/index',
+      'pages/home/home_view',
+      'pages/account/account_editor_view',
     ],
     window: {
       backgroundTextStyle: 'light',

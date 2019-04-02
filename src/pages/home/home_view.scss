@@ -1,0 +1,23 @@
+.message-view {
+
+}
+
+.home-view {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  .top-bar{
+    margin: 2px 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.account-view {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  .user-info-view{
+
+  }
+}

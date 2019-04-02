@@ -4,4 +4,4 @@ export const baseUrl = 'https://www.r-share.cn/';
 
 //输出日志信息
 
-export const noConsole = false;
+export const noConsole = true;

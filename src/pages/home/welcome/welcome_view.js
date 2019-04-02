@@ -1,17 +1,23 @@
 import Taro from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
+import { AtButton, AtMessage } from 'taro-ui'
 import { connect } from '@tarojs/redux';
-import encryptedDataTools from '../../../utils/encryptedDataTools'
 
 import './welcome_view.scss'
+import Request from "src/utils/request";
+import {API} from "src/constants/apis";
 
 // @connect(({ home, loading }) => ({
 //   ...home,
 //   ...loading,
 // }))
 const mapStateToProps = (state) => {
-  return { account: state.account };
+  console.log(state)
+  const isLoading = state.loading.effects['account/login'];
+  return {
+    account: state.account,
+    isLoading,
+  };
 };
 
 @connect(mapStateToProps, null)
@@ -20,44 +26,96 @@ class WelcomeView extends Taro.PureComponent {
     navigationBarTitleText: '快来LPHH的世界冒险～'
   };
   state = {
-    isLoading: false,
+    loading: false,
   }
   componentWillReceiveProps (nextProps) {
     console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }
+  componentWillMount() {
+    Taro.clearStorageSync();
+  }
 
   componentDidShow () { }
 
   componentDidHide () { }
+
   handleLoginClick = () => {
-    this.setState({
-      isLoading: true,
+    Taro.login({
+      success: res => {
+        //发送res.code到后台换取openId，sessionKey， unionId
+        Taro.getUserInfo({
+          success: re => {
+            Taro.setStorageSync('avator', re.userInfo.avatarUrl)
+            this.props.dispatch({
+              type: 'account/login',
+              payload: {
+                token: res.code,
+                nickname: re.userInfo.nickName,
+                sex: re.userInfo.gender,
+              },
+            }).then(() => {
+              if(this.props.account.id) {
+                this.setState({
+                  loading: true,
+                });
+                Taro.vibrateLong({
+                  success: () => {
+                    console.log('登录成功～～');
+                    setTimeout(() => {
+                      Taro.redirectTo({
+                        url: '/pages/home/home_view',
+                      })
+                    }, 2000)
+
+                  }
+                })
+
+              } else {
+                Taro.vibrateLong({
+                  success: () => {
+                    console.log('登录失败');
+                    Taro.atMessage({
+                      'message': '网络错误，请稍后重试！',
+                      'type': 'error',
+                      duration: 5000,
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
     });
-    this.props.dispatch({
-      type: 'account/login',
-      payload: {},
-    })
   };
   render() {
     return (
       <View className='welcome-view'>
-        <View className='at-row at-row__justify--center'>
-          <View className='at-col at-col-5'>
-            <AtButton
-              type='primary'
-              loading={this.state.isLoading}
-              circle
-              onClick={this.handleLoginClick}
-              openType='getUserInfo'
-            >
-              开始探险HoHo～
-            </AtButton>
-
-          </View>
-
+        <View className='button-view'>
+          <AtButton
+            type='primary'
+            loading={this.props.isLoading}
+            circle
+            onClick={this.handleLoginClick}
+            openType='getUserInfo'
+            full={false}
+            disabled={this.props.isLoading}
+          >
+            {!this.props.isLoading && !this.state.loading && <Text>
+              探险HoHo～
+            </Text>}
+            {this.props.isLoading && <Text>
+              准备中...
+            </Text>}
+            {this.state.loading && !this.props.isLoading && <Text>
+              进入神秘的HOHO世界
+            </Text>}
+          </AtButton>
+          <AtMessage />
         </View>
+
       </View>
     )
   }
