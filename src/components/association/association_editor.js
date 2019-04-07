@@ -6,7 +6,7 @@ import './association_editor.scss';
 
 class AssociationEditor extends Taro.PureComponent {
   static propTypes = {
-    association: PropTypes.shape({}),
+    Association: PropTypes.shape({}),
     onCreateClick: PropTypes.func,
     isLoading: PropTypes.bool.isRequired,
   };
@@ -20,7 +20,7 @@ class AssociationEditor extends Taro.PureComponent {
   };
   state = {
     canSubmit: false,
-    association: this.props.association,
+    association: this.props.Association,
   };
   handleInputChange = (keyName, value) => {
     if(keyName === 'description') {

@@ -40,7 +40,7 @@ export default {
         type: 'accountMe',
         payload: {token: Taro.getStorageSync('token')}
       });
-      console.log(data);
+      return data;
     },
     //发起登录者信息查询
     *accountMe({ payload }, {call ,put, select }) {

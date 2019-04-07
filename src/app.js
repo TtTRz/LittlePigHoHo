@@ -32,7 +32,8 @@ class App extends Component {
       'pages/home/home_view',
       'pages/account/account_editor_view',
       'pages/account/account_school_view',
-      'pages/association/association_create_view'
+      'pages/association/association_create_view',
+      'pages/association/my_association_list_view',
     ],
     window: {
       backgroundTextStyle: 'light',

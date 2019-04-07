@@ -12,7 +12,6 @@ import {API} from "src/constants/apis";
 //   ...loading,
 // }))
 const mapStateToProps = (state) => {
-  console.log(state)
   const isLoading = state.loading.effects['account/login'];
   return {
     account: state.account,

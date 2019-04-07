@@ -16,11 +16,13 @@ const mapStateToProps = (state) => {
   } else {
     sex = '未知';
   }
+  const isLoading = state.loading.effects['account/editAccount'];
   return {
     account: {
       ...state.account,
       sex: sex,
     },
+    isLoading,
   }
 };
 
@@ -56,7 +58,7 @@ class AccountEditorView extends Taro.PureComponent {
   handlePickChange = (keyName, e) =>{
     if (keyName === 'sex') {
       this.setState({
-        ...this.state,
+        canSubmit: true,
         account: {
           ...this.state.account,
           [keyName]: this.sex[e.detail.value]
@@ -80,8 +82,19 @@ class AccountEditorView extends Taro.PureComponent {
         accountId: this.props.account.id,
         sex: sex,
       }
-    }).then(() => {
-      console.log(123)
+    }).then((data) => {
+      if(data.id) {
+        Taro.atMessage({
+          'message': '创建成功',
+          'type': 'success',
+          duration: 1000,
+        })
+        setTimeout(() => {
+          Taro.redirectTo({
+            url: '/pages/home/home_view'
+          })
+        }, 1500)
+      }
     })
   };
   render() {
@@ -138,13 +151,14 @@ class AccountEditorView extends Taro.PureComponent {
               name='email'
               title='邮箱:'
               type='text'
+              clear
               placeholder='请输入您的邮箱'
               value={this.state.account.email}
               onChange={this.handleInputChange.bind(this, 'email')}
             />
           </View>
           <View className='submit-button'>
-            <AtButton disabled={!this.state.canSubmit} type='primary' onClick={this.handleSubmitClick.bind(this)}>确认修改</AtButton>
+            <AtButton disabled={!this.state.canSubmit || this.props.isLoading} loading={this.props.isLoading} type='primary' onClick={this.handleSubmitClick.bind(this)}>确认修改</AtButton>
           </View>
         </View>
       </View>

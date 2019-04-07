@@ -15,7 +15,7 @@ export const API = {
     LIST: 'schools/:sid/associations/list',
     ADD: 'schools/:sid/associations',
     CURD: 'schools/:sid/associations/:aid',
-
+    MGET: 'schools/:sid/associations/_mget',
   }
 
 };

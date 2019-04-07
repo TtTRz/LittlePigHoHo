@@ -1,0 +1,29 @@
+.association-list-view{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8f8f8;
+  .header{
+    align-items: center;
+    padding: 1.28rem;
+    height: 3.84rem;
+    .title{
+      position: relative;
+      height: 2.6rem;
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .title::after{
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: inline-block;
+      width: 3rem;
+      height: 2PX;
+      border-radius: 1PX;
+      background-color: #6190e8;
+    }
+  }
+}

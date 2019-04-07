@@ -24,9 +24,9 @@ export default {
       const { data } = req.data;
       yield put({
         type: 'saveSchoolList',
-        payload: {
+        payload: [
           ...data,
-        }
+        ]
       })
     }
   },
@@ -35,9 +35,9 @@ export default {
     saveSchoolList(state, { payload }) {
       return {
         ...state,
-        list: {
+        list: [
           ...payload,
-        }
+        ]
       }
     },
   }

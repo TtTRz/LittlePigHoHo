@@ -22,3 +22,14 @@ export const addAssociation = (payload) => {
     })
   )
 };
+
+export const fetchAssociationEntities = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.MGET);
+  return (
+    Request({
+      url: pattern({ sid: payload.schoolId }),
+      method: 'post',
+      data: { ids: payload.ids },
+    })
+  )
+}

@@ -52,7 +52,7 @@ class AssociationEditorView extends Taro.PureComponent {
           duration: 1000,
         })
         setTimeout(() => {
-          Taro.navigateTo({
+          Taro.redirectTo({
             url: '/pages/home/home_view'
           })
         }, 1500)
