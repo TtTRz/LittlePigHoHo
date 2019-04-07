@@ -13,7 +13,7 @@ export const API = {
   },
   ASSOCIATION: {
     LIST: 'schools/:sid/associations/list',
-    ADD: 'schools/:sid/association',
+    ADD: 'schools/:sid/associations',
     CURD: 'schools/:sid/associations/:aid',
 
   }

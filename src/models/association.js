@@ -14,7 +14,11 @@ export default {
       const req = yield call(association.getAssociationList, payload);
       console.log(req);
     },
-
+    *addAssociation({ payload }, { call, put, select }) {
+      const req = yield call(association.addAssociation, payload);
+      const { data } = req;
+      return data.id;
+    }
   },
 
   reducers: {
@@ -22,6 +26,7 @@ export default {
       return {
         ...state,
         list: {
+          ...state.list,
           ...payload,
         }
       }

@@ -11,3 +11,14 @@ export const getAssociationList = (payload) => {
     })
   )
 };
+
+export const addAssociation = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.ADD);
+  return (
+    Request({
+      url: pattern({ sid: payload.schoolId }),
+      method: 'post',
+      data: payload,
+    })
+  )
+};

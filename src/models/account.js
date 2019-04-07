@@ -16,7 +16,6 @@ export default {
     *login({ payload }, { call, put, select }) {
       //调用微信login接口
       const req = yield call(account.login, payload);
-      console.log(req)
       //将登录id刷入store
       yield put({
         type: 'save',

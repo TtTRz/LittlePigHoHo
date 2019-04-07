@@ -10,7 +10,7 @@ class ActionGridView extends Taro.PureComponent{
 
   };
   GRID = [{
-    key: 'organization',
+    key: 'association',
     iconInfo: {
       size: 28,
       value: 'user',
@@ -19,7 +19,7 @@ class ActionGridView extends Taro.PureComponent{
     },
     value: '我的组织'
   }, {
-    key: 'create_organization',
+    key: 'create_association',
     iconInfo: {
       size: 28,
       value: 'add-circle',
@@ -28,9 +28,14 @@ class ActionGridView extends Taro.PureComponent{
     },
     value: '创建组织'
   }];
-
+  GRID_PATH = {
+    create_association: '/pages/association/association_create_view'
+  }
   handleGridClick = (item) => {
-
+    console.log(item)
+    Taro.navigateTo({
+      url: this.GRID_PATH[item.key]
+    })
   };
 
   render() {
