@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro';
+import PathToRegexp from 'path-to-regexp';
 import Request from '../utils/request'
 import { API } from '../constants/apis'
 
@@ -20,4 +20,14 @@ export const accountMe = (payload) => (
     header: payload.token
   })
 );
+
+export const editAccount = (payload) => {
+  const pattern = PathToRegexp.compile(API.ACCOUNT.CURD);
+  return Request({
+    url: pattern({ aid: payload.accountId }),
+    method: 'put',
+    data: payload,
+  })
+}
+
 

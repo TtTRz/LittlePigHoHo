@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro';
 
-import { baseUrl, noConsole } from '../config';
+import { baseUrl, noConsole, deBug } from '../config';
 
 export default (options = { method: 'GET', data: {}, header: null }) => {
   if(!noConsole) {
@@ -10,15 +10,17 @@ export default (options = { method: 'GET', data: {}, header: null }) => {
       )}`
     )
   }
+  console.log(Taro.getStorageSync('token'))
+  console.log(options.header)
   return Taro.request({
-    url: baseUrl + options.url,
+    url: baseUrl + options.url + (deBug ? '?debug=1' : ''),
     data: {
       ...options.data,
     },
     header: {
       'Content-Type': 'application/json',
       'hoho-auth-model': 'client',
-      'hoho-auth-token': options.header !== null ? options.header : Taro.getStorageSync('token')
+      'hoho-auth-token': options.header !== undefined ? options.header : Taro.getStorageSync('token').toString()
     },
     method: options.method.toUpperCase(),
   }).then(res => {

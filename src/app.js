@@ -31,6 +31,8 @@ class App extends Component {
       'pages/home/welcome/welcome_view',
       'pages/home/home_view',
       'pages/account/account_editor_view',
+      'pages/account/account_school_view',
+      'pages/association/association_editor_view'
     ],
     window: {
       backgroundTextStyle: 'light',

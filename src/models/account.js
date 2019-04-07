@@ -32,7 +32,17 @@ export default {
         payload: { token: req.data.data.token },
       });
     },
+    //修改个人信息
+    *editAccount({ payload }, { call, put, select }) {
+      const req = yield call(account.editAccount, payload);
+      const { data } = req;
 
+      yield put({
+        type: 'accountMe',
+        payload: {token: Taro.getStorageSync('token')}
+      });
+      console.log(data);
+    },
     //发起登录者信息查询
     *accountMe({ payload }, {call ,put, select }) {
       const req = yield call(account.accountMe, payload);
@@ -41,7 +51,7 @@ export default {
       yield put({
         type: 'save',
         payload: {
-          ...data,
+          ...data.data,
         }
       })
     }

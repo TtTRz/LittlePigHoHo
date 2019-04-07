@@ -1,12 +1,12 @@
 import Taro from '@tarojs/taro'
-import { View, Button, Text, Swiper, SwiperItem } from '@tarojs/components'
+import { View, Button, Text, Swiper, SwiperItem, Image} from '@tarojs/components'
 import {AtButton, AtDrawer, AtIcon, AtTabBar, AtList, AtListItem, AtMessage } from 'taro-ui'
 import {connect} from "@tarojs/redux";
 import PropTypes from 'prop-types';
 import UserInfoView from '../../components/home/userinfo_view';
 import ActionGridView from '../../components/home/action_grid_view'
 import './home_view.scss'
-
+import Img1 from '../../static/img/lphh.jpeg'
 const mapStateToProps = (state) => {
   console.log(state);
   return {
@@ -65,7 +65,7 @@ class HomeView extends Taro.PureComponent {
     iconType: 'user'
   }];
   ACCOUNT_VIEW_PATH = {
-    school: '',
+    school: '/pages/account/account_school_view',
     aboutus: '',
     opinion: '',
     info: '/pages/account/account_editor_view',
@@ -84,6 +84,7 @@ class HomeView extends Taro.PureComponent {
         </View>}
         {this.state.currentTab === 1 && <View className='home-view'>
           <Swiper
+            style={{ height: '200px' }}
             className='test-h'
             indicatorColor='#999'
             indicatorActiveColor='#333'
@@ -94,7 +95,10 @@ class HomeView extends Taro.PureComponent {
             duration={1000}
           >
             <SwiperItem>
-              <View >121商店大甩卖</View>
+              <Image
+                style={{ width: '100%' }}
+                src={Img1}
+              />
             </SwiperItem>
             <SwiperItem>
               <View >cyt cici 低至3折</View>

@@ -1,0 +1,92 @@
+.account-editor-view {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8f8f8;
+  .header {
+    align-items: center;
+    padding: 1.28rem;
+    height: 3.84rem;
+    .title{
+      position: relative;
+      height: 2.6rem;
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .title::after{
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      display: inline-block;
+      width: 3rem;
+      height: 2PX;
+      border-radius: 1PX;
+      background-color: #6190e8;
+    }
+  }
+  .content{
+    height: calc(100vh - 3.84rem);
+    background: #fff;
+    box-shadow: 0 0.55467rem 3.47733rem 0 rgba(0,0,0,.11);
+    .input-area{
+      height: calc(100vh - 20rem);
+      //.input::before{
+      //  content: "";
+      //  display: inline-block;
+      //  position: absolute;
+      //  left: .512rem;
+      //  top: 50%;
+      //  margin-top: -.42667rem;
+      //  width: 2PX;
+      //  height: .85333rem;
+      //  background-color: #6190e8;
+      //  box-shadow: 0 0.14933rem 0.256rem 0 rgba(97,144,232,.2);
+      //  border-radius: 1PX;
+      //}
+      .picker{
+        position:relative;
+        padding: 24rpx 0;
+        color:#333;
+        background-color:#FFF;
+        margin-left: 32rpx;
+        margin-bottom: 1PX;
+        display: flex;
+        border-bottom: 0.5px solid #d6e4ef;
+        .label {
+          margin-right:16rpx;
+          width:172rpx;
+          font-size:32rpx;
+          line-height:1.5;
+          vertical-align:middle;
+          text-align:left;
+        }
+        .value {
+          font-size:32rpx;
+          line-height:1.5;
+          height:auto !important;
+          min-height:auto !important;
+
+        }
+
+      }
+      //.picker{
+      //  content: '';
+      //  position: absolute;
+      //  left: 0;
+      //  right: 0;
+      //  transform: scaleY(.5);
+      //  border-bottom: 1PX solid #d6e4ef;
+      //  transform-origin: center;
+      //  box-sizing: border-box;
+      //  pointer-events: none;
+      //}
+    }
+    .submit-button{
+      height: 3em;
+      justify-content: center;
+      display: flex;
+    }
+  }
+}
