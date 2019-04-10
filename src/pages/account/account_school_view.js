@@ -7,9 +7,10 @@ import SchoolList from "../../components/school/school_list";
 
 
 const mapStateToProps = (state) => {
-
+  console.log(state.account.school_id)
   return {
     schoolList: state.school.list,
+    currentSchoolId: state.account.school_id,
   }
 };
 
@@ -21,16 +22,33 @@ class AccountSchoolView extends Taro.PureComponent {
   config = {
     navigationBarTitleText: '切换学校'
   };
-  componentWillMount() {
+  componentDidShow() {
     this.props.dispatch({
       type: 'school/getSchoolList',
     }).then(() => {
 
     })
   }
+  handleSchoolChange = (id) => {
+    this.props.dispatch({
+      type: 'account/changeSchool',
+      payload: {
+        schoolId: id,
+      }
+    }).then(() => {
+      Taro.atMessage({
+        'message': '切换成功',
+        'type': 'success',
+        duration: 3000,
+      })
+      Taro.redirectTo({
+        url: '/pages/home/home_view?tabId=2'
+      })
+    })
+  }
   render() {
     return (
-      <SchoolList schoolListData={this.props.schoolList} />
+      <SchoolList currentSchoolId={this.props.currentSchoolId} schoolListData={this.props.schoolList} onSchoolChange={this.handleSchoolChange} />
     )
   }
 }

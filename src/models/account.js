@@ -53,7 +53,16 @@ export default {
           ...data.data,
         }
       })
-    }
+    },
+    //更换所在学校
+    *changeSchool({ payload }, {call, put, select }) {
+      const req = yield call(account.changeSchool, payload);
+      yield put({
+        type: 'accountMe',
+        payload: {token: Taro.getStorageSync('token')}
+      });
+    },
+
   },
 
   reducers: {

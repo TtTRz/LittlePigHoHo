@@ -1,0 +1,30 @@
+.association-view {
+  height: 100vh;
+  background: #f8f8f8;
+  .association-header {
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    .action-bar {
+      height: 1.5rem;
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      .button {
+        padding: .3rem;
+      }
+    }
+    .avatar {
+
+    }
+    .title {
+      margin-top: .5rem;
+    }
+  }
+  .association-content{
+    background: #fff;
+    height: calc(100vh - 10rem)
+  }
+}

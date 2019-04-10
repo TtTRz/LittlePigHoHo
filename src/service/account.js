@@ -30,4 +30,12 @@ export const editAccount = (payload) => {
   })
 }
 
-
+export const changeSchool = (payload) => {
+  return Request({
+    url: API.ACCOUNT.CHANGE_SCHOOL,
+    method: 'get',
+    params: {
+      school_id: payload.schoolId
+    }
+  })
+};

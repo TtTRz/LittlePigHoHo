@@ -10,6 +10,15 @@ class ActionGridView extends Taro.PureComponent{
 
   };
   GRID = [{
+    key: 'add_association',
+    iconInfo: {
+      size: 28,
+      value: 'add-circle',
+      prefixClass: 'at-icon',
+      color: '#40a9ff'
+    },
+    value: '加入组织'
+  }, {
     key: 'my_association',
     iconInfo: {
       size: 28,
@@ -29,6 +38,7 @@ class ActionGridView extends Taro.PureComponent{
     value: '创建组织'
   }];
   GRID_PATH = {
+    add_association: '/pages/association/association_list_view',
     create_association: '/pages/association/association_create_view',
     my_association: '/pages/association/my_association_list_view',
   }

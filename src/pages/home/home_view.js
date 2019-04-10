@@ -31,6 +31,12 @@ class HomeView extends Taro.PureComponent {
   componentWillReceiveProps (nextProps) {
   }
   componentWillMount() {
+    if(this.$router.params.tabId) {
+      this.setState({
+        ...this.state,
+        currentTab: parseInt(this.$router.params.tabId, 10),
+      })
+    }
   }
   componentWillUnmount () {
 
@@ -42,6 +48,7 @@ class HomeView extends Taro.PureComponent {
       'type': 'success',
       duration: 3000,
     })
+
   }
 
   componentDidHide () { }

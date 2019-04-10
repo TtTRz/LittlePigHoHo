@@ -3,8 +3,9 @@ import { View, Button, Text, Swiper, SwiperItem, Picker } from '@tarojs/componen
 import {AtButton, AtDrawer, AtIcon, AtTabBar, AtList, AtListItem, AtMessage, AtInput } from 'taro-ui'
 import {connect} from "@tarojs/redux";
 import PropTypes from 'prop-types';
-import AssociationEditor from '../../components/association/association_editor';
-import './association_create_view.scss'
+import DepartmentEditor from '../../../components/association/department_editor';
+
+import './department_create_view.scss'
 
 const mapStateToProps = (state) => {
   const isLoading = state.loading.models['association'];
@@ -14,39 +15,50 @@ const mapStateToProps = (state) => {
 };
 
 @connect(mapStateToProps)
-class AssociationEditorView extends Taro.PureComponent {
+class DepartmentCreateView extends Taro.PureComponent {
 
   config = {
     navigationBarTitleText: '创建组织'
   };
-  componentWillMount() {
 
+  componentWillMount() {
+    // this.props.dispatch({
+    //   type: 'association/getAssociationList',
+    //   payload: {
+    //
+    //   }
+    // }).then(() => {
+    //
+    // })
   }
+  state = {
+  };
 
   handleCreateClick = (payload) => {
 
     this.props.dispatch({
-      type: 'association/addAssociation',
+      type: 'association/addDepartment',
       payload: {
         ...payload,
+        associationId: this.$router.params.aid,
         schoolId: 3,
       },
     }).then((result) => {
 
       if(result) {
         Taro.atMessage({
-          'message': '创建成功',
+          'message': '新增成功',
           'type': 'success',
           duration: 1000,
         })
         setTimeout(() => {
-          Taro.redirectTo({
-            url: '/pages/home/home_view'
+          Taro.navigateBack({
+            delta: 1
           })
         }, 1500)
       } else {
         Taro.atMessage({
-          'message': '创建失败',
+          'message': '新增失败',
           'type': 'error',
           duration: 1000,
         })
@@ -55,13 +67,13 @@ class AssociationEditorView extends Taro.PureComponent {
   }
   render() {
     return (
-      <View className='association-create-view'>
+      <View className='department-create-view'>
         <View className='header'>
           <View className='title'>
-            创建您的组织
+            新增部门
           </View>
         </View>
-        <AssociationEditor onCreateClick={this.handleCreateClick} isLoading={this.props.isLoading} />
+        <DepartmentEditor onCreateClick={this.handleCreateClick} isLoading={this.props.isLoading} />
         <AtMessage />
       </View>
 
@@ -69,4 +81,4 @@ class AssociationEditorView extends Taro.PureComponent {
   }
 }
 
-export default AssociationEditorView;
+export default DepartmentCreateView;

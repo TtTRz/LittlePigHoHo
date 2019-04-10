@@ -28,7 +28,6 @@ class WelcomeView extends Taro.PureComponent {
     loading: false,
   }
   componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
   }
 
   componentWillUnmount () { }
@@ -56,18 +55,11 @@ class WelcomeView extends Taro.PureComponent {
               },
             }).then(() => {
               if(this.props.account.id) {
-                this.setState({
-                  loading: true,
-                });
                 Taro.vibrateLong({
                   success: () => {
-                    console.log('登录成功～～');
-                    setTimeout(() => {
-                      Taro.redirectTo({
-                        url: '/pages/home/home_view',
-                      })
-                    }, 2000)
-
+                    Taro.redirectTo({
+                      url: '/pages/home/home_view',
+                    })
                   }
                 })
 
@@ -102,14 +94,11 @@ class WelcomeView extends Taro.PureComponent {
             full={false}
             disabled={this.props.isLoading}
           >
-            {!this.props.isLoading && !this.state.loading && <Text>
+            {!this.props.isLoading && <Text>
               探险HoHo～
             </Text>}
             {this.props.isLoading && <Text>
               准备中...
-            </Text>}
-            {this.state.loading && !this.props.isLoading && <Text>
-              进入神秘的HOHO世界
             </Text>}
           </AtButton>
           <AtMessage />

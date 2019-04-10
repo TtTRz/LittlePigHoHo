@@ -18,7 +18,7 @@ class MyAssociationListView extends Taro.PureComponent {
     navigationBarTitleText: '组织'
 
   };
-  componentWillMount() {
+  componentDidShow() {
     this.props.dispatch({
       type: 'association/getAssociationListMe',
       payload: {
@@ -28,7 +28,11 @@ class MyAssociationListView extends Taro.PureComponent {
 
     })
   }
-
+  handleItemClick = (id) => {
+    Taro.navigateTo({
+      url: '/pages/association/association_view' + '?id=' + id,
+    })
+  };
   render() {
     return (
       <View className='association-list-view'>
@@ -37,7 +41,7 @@ class MyAssociationListView extends Taro.PureComponent {
             您加入的协会
           </View>
         </View>
-        <AssociationList associationListData={this.props.myAssociationList} />
+        <AssociationList me onItemClick={this.handleItemClick} associationListData={this.props.myAssociationList} />
       </View>
     )
   }

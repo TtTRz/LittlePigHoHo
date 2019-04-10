@@ -1,0 +1,42 @@
+.department-editor{
+  height: calc(100vh - 3.84rem);
+  background: #fff;
+  box-shadow: 0 0.55467rem 3.47733rem 0 rgba(0,0,0,.11);
+  .input-area{
+    height: calc(100vh - 20rem);
+    .text-area{
+      margin: 1rem;
+    }
+    .picker{
+      position:relative;
+      padding: 24rpx 0;
+      color:#333;
+      background-color:#FFF;
+      margin-left: 32rpx;
+      margin-bottom: 1PX;
+      display: flex;
+      border-bottom: 0.5px solid #d6e4ef;
+      .label {
+        margin-right:16rpx;
+        width:172rpx;
+        font-size:32rpx;
+        line-height:1.5;
+        vertical-align:middle;
+        text-align:left;
+      }
+      .value {
+        font-size:32rpx;
+        line-height:1.5;
+        height:auto !important;
+        min-height:auto !important;
+
+      }
+
+    }
+  }
+  .submit-button{
+    height: 3em;
+    justify-content: center;
+    display: flex;
+  }
+}

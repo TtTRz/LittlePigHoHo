@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 
 import { baseUrl, noConsole, deBug } from '../config';
 
-export default (options = { method: 'GET', data: {}, header: null }) => {
+export default (options = { method: 'GET', data: {}, header: null, params: {} }) => {
   if(!noConsole) {
     console.log(
       `${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(
@@ -10,10 +10,27 @@ export default (options = { method: 'GET', data: {}, header: null }) => {
       )}`
     )
   }
-  console.log(Taro.getStorageSync('token'))
-  console.log(options.header)
+  let urlParams = '';
+  let firstParam = true;
+  for (let i in options.params) {
+    if( firstParam ) {
+      firstParam = false;
+      if(options.params[i] !== undefined && options.params[i] !== "" && options.params[i] !== null) {
+        urlParams = urlParams + '?' + i + '=' + options.params[i];
+
+      }
+    } else {
+      if(options.params[i] !== undefined && options.params[i] !== "" && options.params[i] !== null) {
+        urlParams = urlParams + '&' + i + '=' + options.params[i];
+
+      }    }
+  }
+  let debugParams = '&debug=1';
+  if(urlParams === '') {
+    debugParams = '?debug=1'
+  }
   return Taro.request({
-    url: baseUrl + options.url + (deBug ? '?debug=1' : ''),
+    url: baseUrl + options.url + urlParams + (deBug ? debugParams : ''),
     data: {
       ...options.data,
     },
@@ -32,6 +49,7 @@ export default (options = { method: 'GET', data: {}, header: null }) => {
           res.data
         );
       }
+
       // if (data.status !== 'ok') {
       //   Taro.showToast({
       //     title: `${res.data.error.message}~` || res.data.error.code,
@@ -41,6 +59,11 @@ export default (options = { method: 'GET', data: {}, header: null }) => {
       // }
       return data;
     } else {
+      Taro.showToast({
+        title: data.error,
+        icon: 'none',
+        mask: true,
+      });
       throw new Error (`网络请求错误，状态码${statusCode}`)
     }
   });
