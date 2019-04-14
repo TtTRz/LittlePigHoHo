@@ -27,12 +27,14 @@ const mapStateToProps = (state) => {
       }
     });
   }
+  const schoolId = state.account.school_id;
   return {
     association: state.association.entity,
     canManage,
     isMember,
     membersList: state.association.membersList,
-    departmentList: state.association.departmentList
+    departmentList: state.association.departmentList,
+    schoolId,
   }
 };
 
@@ -58,7 +60,7 @@ class AssociationView extends Taro.PureComponent {
     this.props.dispatch({
       type: 'association/getAssociationEntity',
       payload: {
-        schoolId: 3,
+        schoolId: this.props.schoolId,
         associationId: this.$router.params.id,
       }
     }).then((data) => {
@@ -66,14 +68,14 @@ class AssociationView extends Taro.PureComponent {
         this.props.dispatch({
           type: 'association/getAssociationMembersList',
           payload: {
-            schoolId: 3,
+            schoolId: this.props.schoolId,
             associationId: this.$router.params.id,
           }
         })
         this.props.dispatch({
           type: 'association/getDepartmentList',
           payload: {
-            schoolId: 3,
+            schoolId: this.props.schoolId,
             associationId: this.$router.params.id,
           }
         })
@@ -85,7 +87,7 @@ class AssociationView extends Taro.PureComponent {
     this.props.dispatch({
       type: 'association/getAssociationEntity',
       payload: {
-        schoolId: 3,
+        schoolId: this.props.schoolId,
         associationId: this.$router.params.id,
       }
     }).then((data) => {
@@ -93,14 +95,14 @@ class AssociationView extends Taro.PureComponent {
         this.props.dispatch({
           type: 'association/getAssociationMembersList',
             payload: {
-              schoolId: 3,
+              schoolId: this.props.schoolId,
               associationId: this.$router.params.id,
             }
         })
         this.props.dispatch({
           type: 'association/getDepartmentList',
           payload: {
-            schoolId: 3,
+            schoolId: this.props.schoolId,
             associationId: this.$router.params.id,
           }
         })
@@ -137,11 +139,10 @@ class AssociationView extends Taro.PureComponent {
     })
   }
   handleSubmitJoinClick = () => {
-    console.log(123321)
     this.props.dispatch({
       type: 'association/joinAssociation',
       payload: {
-        schoolId: 3,
+        schoolId: this.prosp.schoolId,
         associationId: this.props.association.id,
         choosing_code: this.state.choosing_code,
       }
@@ -168,7 +169,7 @@ class AssociationView extends Taro.PureComponent {
     this.props.dispatch({
       type: 'association/delAssociation',
       payload: {
-        schoolId: 3,
+        schoolId: this.props.schoolId,
         associationId: this.props.association.id,
       }
     }).then(() => {
@@ -186,7 +187,7 @@ class AssociationView extends Taro.PureComponent {
       type: 'association/editAssociation',
       payload: {
         ...payload,
-        schoolId: 3,
+        schoolId: this.props.schoolId,
         associationId: this.props.association.id,
       }
     }).then((result) => {
@@ -198,7 +199,7 @@ class AssociationView extends Taro.PureComponent {
         this.props.dispatch({
           type: 'association/getAssociationEntity',
           payload: {
-            schoolId: 3,
+            schoolId: this.props.schoolId,
             associationId: this.props.association.id,
           }
         });
@@ -218,6 +219,24 @@ class AssociationView extends Taro.PureComponent {
       currentSide: value,
     })
   }
+  handleDelMembers = (id)=> {
+    console.log(123)
+    this.props.dispatch({
+      type: 'association/delAssociationMembers',
+      payload: {
+        schoolId: this.props.schoolId,
+        associationId: this.props.association.id,
+        accountId: id,
+      }
+    })
+    this.props.dispatch({
+      type: 'association/getAssociationMembersList',
+      payload: {
+        schoolId: this.props.schoolId,
+        associationId: this.$router.params.id,
+      }
+    })
+  };
   renderTabList = () => {
     let TAB_LIST = [{
       title: '简介'
@@ -292,7 +311,7 @@ class AssociationView extends Taro.PureComponent {
                     <View style='font-size:18px;text-align:center;'>协会码: {this.props.association.choosing_code}</View>
                   </AtTabsPane>
                   <AtTabsPane tabDirection='vertical' current={this.state.currentSide} index={1}>
-                    <MemberList departmentData={this.props.departmentList} memberData={this.props.membersList} />
+                    <MemberList departmentData={this.props.departmentList} memberData={this.props.membersList} onDelMembers={this.handleDelMembers}/>
                   </AtTabsPane>
                   <AtTabsPane tabDirection='vertical' current={this.state.currentSide} index={2}>
                     <AssociationEditor editor onDelClick={this.handleDelSubmitClick} isLoading={this.props.isLoading} onCreateClick={this.handleEditSubmitClick} association={this.props.association} />

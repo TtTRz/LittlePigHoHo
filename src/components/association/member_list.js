@@ -14,6 +14,7 @@ class MemberList extends Taro.PureComponent {
   static propTypes = {
     departmentData: PropTypes.arrayOf(PropTypes.shape({})),
     memberData: PropTypes.arrayOf(PropTypes.shape({})),
+    onDelMembers: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -58,7 +59,7 @@ class MemberList extends Taro.PureComponent {
       <View>
         {data.map((item) => {
           return (
-            <HoAccordion department={item} />
+            <HoAccordion department={item} onDelMembers={this.props.onDelMembers}/>
           )
         })}
       </View>

@@ -32,8 +32,8 @@ class AssociationEditorView extends Taro.PureComponent {
         schoolId: 3,
       },
     }).then((result) => {
-
-      if(result) {
+      console.log(result)
+      if(result === 1) {
         Taro.atMessage({
           'message': '创建成功',
           'type': 'success',
@@ -46,7 +46,7 @@ class AssociationEditorView extends Taro.PureComponent {
         }, 1500)
       } else {
         Taro.atMessage({
-          'message': '创建失败',
+          'message': '协会名重复',
           'type': 'error',
           duration: 1000,
         })

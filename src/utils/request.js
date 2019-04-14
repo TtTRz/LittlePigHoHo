@@ -59,6 +59,8 @@ export default (options = { method: 'GET', data: {}, header: null, params: {} })
       // }
       return data;
     } else {
+      console.log(res);
+      console.log('报错详细信息', options.url, options.data)
       Taro.showToast({
         title: data.error,
         icon: 'none',

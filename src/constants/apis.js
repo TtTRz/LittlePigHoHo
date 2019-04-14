@@ -21,6 +21,7 @@ export const API = {
     MEMBERS: {
       LIST: 'schools/:sid/associations/:aid/accounts/list',
       MGET: 'schools/:sid/associations/:aid/accounts/_mget',
+      CURD: 'schools/:sid/associations/:aid/accounts/:acid',
     },
     DEPARTMENT: {
       LIST: 'schools/:sid/associations/:aid/departments/list',

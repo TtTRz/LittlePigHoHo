@@ -9,6 +9,8 @@ import './association_list_view.scss';
 const mapStateToProps = (state) => {
   return {
     myAssociationList: state.association.myList,
+    schoolId: state.account.school_id,
+
   }
 };
 
@@ -22,7 +24,7 @@ class MyAssociationListView extends Taro.PureComponent {
     this.props.dispatch({
       type: 'association/getAssociationListMe',
       payload: {
-        schoolId: 3,
+        schoolId: this.props.schoolId,
       }
     }).then(() => {
 

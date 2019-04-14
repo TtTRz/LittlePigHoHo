@@ -154,3 +154,13 @@ export const delAssociation = (payload) => {
     })
   )
 }
+
+export const delAssociationMembers = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.MEMBERS.CURD);
+  return (
+    Request({
+      url: pattern({ sid: payload.schoolId, aid: payload.associationId, acid: payload.accountId }),
+      method: 'delete',
+    })
+  )
+}

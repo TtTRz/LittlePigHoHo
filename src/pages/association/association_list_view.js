@@ -9,6 +9,7 @@ import AssociationView from "src/pages/association/association_view";
 const mapStateToProps = (state) => {
   return {
     associationListData: state.association.list,
+    schoolId: state.account.school_id,
   }
 };
 
@@ -29,11 +30,11 @@ class AssociationListView extends Taro.PureComponent {
   state = {
 
   };
-  componentWillMount() {
+  componentDidShow() {
     this.props.dispatch({
       type: 'association/getAssociationList',
       payload: {
-        schoolId: 3,
+        schoolId: this.props.schoolId,
       }
     })
   }
@@ -41,7 +42,7 @@ class AssociationListView extends Taro.PureComponent {
     this.props.dispatch({
       type: 'association/getAssociationList',
       payload: {
-        schoolId: 3,
+        schoolId: this.props.schoolId,
         searchKey: value,
       }
     })

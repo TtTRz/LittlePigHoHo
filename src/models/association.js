@@ -42,7 +42,7 @@ export default {
         type: 'account/accountMe',
         payload: {token: Taro.getStorageSync('token')}
       });
-      return data.id;
+      return data.status;
     },
     *fetchAssociationEntities({ payload }, {call, put, select }) {
       const req = yield call(association.fetchAssociationEntities, payload);
@@ -58,6 +58,10 @@ export default {
       return data;
     },
     *getAssociationListMe({ payload }, { call, put, select }) {
+      yield put({
+        type: 'account/accountMe',
+        payload: {token: Taro.getStorageSync('token')}
+      });
       const ids = yield select(state => state.account.associations);
       const assIds = ids.map((item) => {
         return  item.association_id;
@@ -116,6 +120,10 @@ export default {
         type: 'saveDepartmentList',
         payload: data,
       })
+    },
+    *delAssociationMembers({payload }, { call, put, select }) {
+      const result = yield call(association.delAssociationMembers, payload);
+      console.log(result);
     }
   },
 
