@@ -12,7 +12,7 @@ import {API} from "src/constants/apis";
 //   ...loading,
 // }))
 const mapStateToProps = (state) => {
-  const isLoading = state.loading.effects['account/login'];
+  const isLoading = state.loading.models['account'];
   return {
     account: state.account,
     isLoading,
@@ -32,7 +32,7 @@ class WelcomeView extends Taro.PureComponent {
 
   componentWillUnmount () { }
   componentWillMount() {
-    Taro.clearStorageSync();
+
   }
 
   componentDidShow () { }
@@ -54,7 +54,7 @@ class WelcomeView extends Taro.PureComponent {
                 sex: re.userInfo.gender,
               },
             }).then(() => {
-              if(this.props.account.id) {
+              if(this.props.account.id ) {
                 Taro.vibrateLong({
                   success: () => {
                     Taro.redirectTo({

@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
   const isLoading = state.loading.models['association'];
   return {
     isLoading,
+    account: state.account
   }
 };
 
@@ -29,7 +30,7 @@ class AssociationEditorView extends Taro.PureComponent {
       type: 'association/addAssociation',
       payload: {
         ...payload,
-        schoolId: 3,
+        schoolId: this.props.account.school_id,
       },
     }).then((result) => {
       console.log(result)

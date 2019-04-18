@@ -2,10 +2,12 @@
   height: 100vh;
   background: #f8f8f8;
   .association-header {
-    height: 10rem;
+    height: 13rem;
     display: flex;
-    align-items: center;
     flex-direction: column;
+    background: url("../../static/img/md.jpeg");
+    justify-content: space-between;
+    background-size: 100%;
     .action-bar {
       height: 1.5rem;
       display: flex;
@@ -16,15 +18,15 @@
         padding: .3rem;
       }
     }
-    .avatar {
-
-    }
     .title {
-      margin-top: .5rem;
+      margin: .3em .5em;
+      color: #f5f5f5;
+      font-weight: bold;
+      font-size: 1.5em;
     }
   }
   .association-content{
-    background: #fff;
+    background: #ffffff;
     height: calc(100vh - 10rem)
   }
 }

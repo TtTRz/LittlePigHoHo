@@ -2,6 +2,9 @@ import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtButton, AtInput, AtForm, AtRadio, AtMessage, message, AtToast, AtIcon, AtGrid} from 'taro-ui'
 import PropTypes from 'prop-types'
+import {connect} from "@tarojs/redux";
+
+
 
 class DepartmentGrid extends Taro.PureComponent {
   static propTypes = {
@@ -21,7 +24,9 @@ class DepartmentGrid extends Taro.PureComponent {
         url: '/pages/association/department/department_create_view' + '?aid=' + this.props.association.id,
       })
     } else {
-
+      Taro.navigateTo({
+        url: '/pages/association/department/department_view' + '?departmentId=' + item.key,
+      })
     }
   };
   renderDepartmentGrid = () => {
@@ -55,10 +60,13 @@ class DepartmentGrid extends Taro.PureComponent {
   render() {
     const gridData = this.renderDepartmentGrid();
     return (
-      <AtGrid
-        data={gridData}
-        onClick={this.handleClick.bind(this)}
-      />
+      <View>
+        {!this.props.isLoading && <AtGrid
+          data={gridData}
+          onClick={this.handleClick.bind(this)}
+        />}
+      </View>
+
     )
   }
 }

@@ -1,6 +1,7 @@
+
 import Taro from '@tarojs/taro'
 import { View, Button, Text, Swiper, SwiperItem, Picker } from '@tarojs/components'
-import {AtButton, AtDrawer, AtIcon, AtTabBar, AtList, AtListItem, AtMessage, AtInput } from 'taro-ui'
+import {AtButton, AtDrawer, AtActivityIndicator, AtIcon, AtTabBar, AtList, AtListItem, AtMessage, AtInput } from 'taro-ui'
 import {connect} from "@tarojs/redux";
 import PropTypes from 'prop-types';
 import AssociationList from "../../components/association/association_list";
@@ -10,6 +11,7 @@ const mapStateToProps = (state) => {
   return {
     associationListData: state.association.list,
     schoolId: state.account.school_id,
+    isLoading: state.loading.models['association'],
   }
 };
 
@@ -54,8 +56,14 @@ class AssociationListView extends Taro.PureComponent {
   };
   render() {
     return (
-      <View>
-        <AssociationList search  onItemClick={this.handleItemClick} associationListData={this.props.associationListData} onSearchClick={this.handleSearchClick} />
+      <View >
+        <AssociationList
+          search
+          onItemClick={this.handleItemClick}
+          associationListData={this.props.associationListData}
+          onSearchClick={this.handleSearchClick}
+          isLoading={this.props.isLoading}
+        />
       </View>
     )
   }

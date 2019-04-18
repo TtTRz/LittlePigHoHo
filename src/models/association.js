@@ -6,10 +6,9 @@ export default {
   namespace: 'association',
   state: {
     list: [],
-    myList: [],
     entity: {},
     membersList: [],
-    departmentList: [],
+    myEntity: {},
   },
 
   effects: {
@@ -57,29 +56,41 @@ export default {
       })
       return data;
     },
-    *getAssociationListMe({ payload }, { call, put, select }) {
-      yield put({
-        type: 'account/accountMe',
-        payload: {token: Taro.getStorageSync('token')}
-      });
-      const ids = yield select(state => state.account.associations);
-      const assIds = ids.map((item) => {
-        return  item.association_id;
-      });
-      const result = yield call(association.fetchAssociationEntities, { schoolId: payload.schoolId, ids: assIds });
+    *getAssociationEntityMe({ payload }, {call, put, select }) {
+      const result = yield call(association.getAssociationEntity, {schoolId: payload.schoolId, associationId: payload.associationId });
       const { data } = result.data;
-      const myData = data.map((item, index) => {
-        return {
-          ...item,
-          role: ids[index].role,
-        }
-      });
       yield put({
-        type: 'saveMyAssociationList',
-        payload: [
-          ...myData,
-        ]
+        type: 'saveAssociationMe',
+        payload: data,
       })
+      return data;
+    },
+    *getAssociationListMe({ payload }, { call, put, select }) {
+      // yield put({
+      //   type: 'account/accountMe',
+      //   payload: {token: Taro.getStorageSync('token')}
+      // });
+      const ids = yield select(state => state.account.associations);
+      console.log(ids, '123123123')
+      if(ids.length !==0 ){
+        const assIds = ids.map((item) => {
+          return item.association_id;
+        });
+        const result = yield call(association.fetchAssociationEntities, { schoolId: payload.schoolId, ids: assIds });
+        const { data } = result.data;
+        const myData = data.map((item, index) => {
+          return {
+            ...item,
+            role: ids[index].role,
+          }
+        });
+        yield put({
+          type: 'saveAssociationList',
+          payload: [
+            ...myData,
+          ]
+        })
+      }
     },
     *joinAssociation({ payload }, { call, put, select }) {
       const req = yield call(association.joinAssociationEntity, payload);
@@ -104,48 +115,23 @@ export default {
         payload: data,
       })
     },
-    *addDepartment({ payload }, { call, put, select }) {
-      const result = yield call(association.addDepartment, payload);
-      return result;
-    },
-    *getDepartmentList({payload}, { call, put, select }) {
-      const req = yield call(association.getDepartmentList, payload);
-      const { departments } =req.data;
-      const ids = departments.map((item) => {
-        return item.id;
-      });
-      const result = yield call(association.getDepartmentEntities, { ...payload, ids });
-      const { data } = result.data;
-      yield put({
-        type: 'saveDepartmentList',
-        payload: data,
-      })
-    },
     *delAssociationMembers({payload }, { call, put, select }) {
       const result = yield call(association.delAssociationMembers, payload);
       console.log(result);
-    }
+    },
   },
 
   reducers: {
-    saveMyAssociationList(state, { payload }) {
+    saveAssociationMe(state, { payload }) {
       return {
         ...state,
-        myList: [
-          ...payload,
-        ]
+        myEntity: payload,
       }
     },
     saveAssociation(state, { payload }) {
       return {
         ...state,
         entity: payload,
-      }
-    },
-    saveDepartmentList(state, { payload}) {
-      return {
-        ...state,
-        departmentList: payload,
       }
     },
     saveAssociationMembersList(state, { payload }) {

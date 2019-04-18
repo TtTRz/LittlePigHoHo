@@ -1,60 +1,91 @@
 import Taro from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Image } from '@tarojs/components'
 import { AtButton, AtInput, AtForm, AtRadio, AtMessage, message, AtToast, AtIcon, AtGrid} from 'taro-ui'
 import PropTypes from 'prop-types'
 
+import './actuib_grid_view.scss';
+
 class ActionGridView extends Taro.PureComponent{
-
-
+  static propTypes = {
+    type: PropTypes.string.isRequired,
+  };
   state = {
 
   };
-  GRID = [{
+  association_list = [{
+    key: 'association-list',
+    iconClassname: '.all-asso-list',
+    title: '全部组织',
+    url: '/pages/association/association_list_view'
+  }, {
+    key: 'my-department',
+    iconClassname: '.department',
+    title: '我的部门'
+  },{
     key: 'add_association',
-    iconInfo: {
-      size: 28,
-      value: 'add-circle',
-      prefixClass: 'at-icon',
-      color: '#40a9ff'
-    },
-    value: '加入组织'
-  }, {
-    key: 'my_association',
-    iconInfo: {
-      size: 28,
-      value: 'user',
-      prefixClass: 'at-icon',
-      color: '#40a9ff'
-    },
-    value: '我的组织'
-  }, {
-    key: 'create_association',
-    iconInfo: {
-      size: 28,
-      value: 'add-circle',
-      prefixClass: 'at-icon',
-      color: '#40a9ff'
-    },
-    value: '创建组织'
+    iconClassname: '.create-asso',
+    title: '创建组织',
+    url: '/pages/association/association_create_view'
+
   }];
-  GRID_PATH = {
-    add_association: '/pages/association/association_list_view',
-    create_association: '/pages/association/association_create_view',
-    my_association: '/pages/association/my_association_list_view',
-  }
-  handleGridClick = (item) => {
+  action_list = [{
+    key: 'check',
+    iconClassname: '.check',
+    title: '考勤',
+  }, {
+    key: 'notices',
+    iconClassname: '.notices',
+    title: '发布通知',
+  }, {
+    key: 'assignment',
+    iconClassname: '.mission',
+    title: '发布任务',
+  }];
+
+  handleItemClick = (item) => {
     console.log(item)
     Taro.navigateTo({
-      url: this.GRID_PATH[item.key]
+      url: item.url,
     })
-  };
-
+  }
   render() {
     return (
-      <AtGrid
-        data={this.GRID}
-        onClick={this.handleGridClick.bind(this)}
-      />
+     <View>
+       {this.props.type === 'association' &&  <View className='action-grid-view'>
+         <View className='grid-title'>
+           组织
+         </View>
+         <View className='at-row at-row--wrap'>
+           {this.association_list.map((item) => {
+             return (
+               <View className='at-col at-col-3'>
+                 <View className='grid-item' onClick={this.handleItemClick.bind(this, item)} >
+                   <View className={item.iconClassname}></View>
+                   <View className='item-title'>{item.title}</View>
+                 </View>
+               </View>
+             )
+           })}
+         </View>
+       </View>}
+       {this.props.type === 'action' &&  <View className='action-grid-view'>
+         <View className='grid-title'>
+           功能
+         </View>
+         <View className='at-row at-row--wrap'>
+           {this.action_list.map((item) => {
+             return (
+               <View className='at-col at-col-3'>
+                 <View className='grid-item' onClick={this.handleItemClick.bind(this, item)} >
+                   <View className={item.iconClassname}></View>
+                   <View className='item-title'>{item.title}</View>
+                 </View>
+               </View>
+             )
+           })}
+         </View>
+       </View>}
+     </View>
     )
   }
 }

@@ -3,6 +3,7 @@ import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import PropTypes from 'prop-types';
 import noop from 'lodash.noop'
+
 class HoAccordion extends Taro.PureComponent {
 
   static propTypes = {

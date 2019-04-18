@@ -29,14 +29,10 @@ class UserInfoView extends Taro.PureComponent {
     return (
 
       <View className='userinfo-view'>
-        <View className='userinfo-item'>
           <HoAvatar url={this.props.account.avator}/>
-        </View>
-        <View className='userinfo-item'>
           <Text>
             {this.props.account.nickname}
           </Text>
-        </View>
       </View>
     )
   }

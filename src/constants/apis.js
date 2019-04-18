@@ -29,6 +29,9 @@ export const API = {
       ADD: 'schools/:sid/associations/:aid/departments',
       CURD: 'schools/:sid/associations/:aid/departments/:did',
     }
+  },
+  NOTICES: {
+    LIST: 'schools/:sid/associations/:aid/notices/list',
   }
 
 };

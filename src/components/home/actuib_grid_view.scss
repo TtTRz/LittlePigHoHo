@@ -1,0 +1,62 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+
+.action-grid-view {
+  .grid-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    padding-top: .5em;
+  }
+  .grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .5em;
+    .item-title {
+      font-size: 0.9em;
+      color: #595959;
+    }
+  }
+}
+
+.all-asso-list {
+  height: 2.5em;
+  width: 2.5em;
+  background-image: url("../../static/icon/list.png");
+  background-size: 100%;
+}
+.my-asso-list{
+  height: 2.5em;
+  width: 2.5em;
+  background-image: url("../../static/icon/stu.png");
+  background-size: 100%;
+}
+.create-asso{
+  height: 2.5em;
+  width: 2.5em;
+  background-image: url("../../static/icon/plus.png");
+  background-size: 100%;
+}
+.notices {
+  height: 2.5em;
+  width: 2.5em;
+  background-image: url("../../static/icon/notices.png");
+  background-size: 100%;
+}
+.check {
+  height: 2.5em;
+  width: 2.5em;
+  background-image: url("../../static/icon/check.png");
+  background-size: 100%;
+}
+.mission {
+  height: 2.5em;
+  width: 2.5em;
+  background-image: url("../../static/icon/mission.png");
+  background-size: 100%;
+}
+.department{
+  height: 2.5em;
+  width: 2.5em;
+  background-image: url("../../static/icon/team.png");
+  background-size: 100%;
+}

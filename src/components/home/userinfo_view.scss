@@ -2,8 +2,11 @@
   height: 25vh;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #69c0ff;
+  justify-content: space-evenly;
   flex-direction: column;
+  background: url("../../static/img/bk.jpeg");
+  background-size: 100%;
+
   .userinfo-item {
     margin: 10px;
   }

@@ -1,10 +1,11 @@
 import Taro from '@tarojs/taro'
 import { View, Button, Text, Swiper, SwiperItem, Picker } from '@tarojs/components'
-import {AtButton, AtDrawer, AtIcon, AtTabBar, AtList, AtListItem, AtAccordion, AtMessage, AtFloatLayout,AtTabs,AtTabsPane, AtInput } from 'taro-ui'
+import {AtButton, AtDrawer, AtIcon, AtTabBar, AtList, AtListItem, AtAccordion,AtDivider, AtMessage, AtFloatLayout,AtTabs,AtTabsPane, AtInput } from 'taro-ui'
 import {connect} from "@tarojs/redux";
 import PropTypes from 'prop-types';
 import './association_view.scss'
 import Img1 from '../../static/img/lphh.jpeg'
+import BG from '../../static/img/bnuzimg.jpeg'
 import HoAvatar from "../../components/home/widgets/avatar";
 import MemberList from "../../components/association/member_list";
 import DepartmentGrid from "../../components/association/department_grid";
@@ -35,20 +36,15 @@ const mapStateToProps = (state) => {
     membersList: state.association.membersList,
     departmentList: state.association.departmentList,
     schoolId,
-  }
+    isLoading: state.loading.models['association'],
+
+}
 };
 
 
 @connect(mapStateToProps)
 class AssociationView extends Taro.PureComponent {
 
-  TAB_LIST = [{
-    title: '简介'
-  }, {
-    title: '部门'
-  }, {
-    title: '管理'
-  }];
   SIDE_LIST = [{
     title: '协会码',
   }, {
@@ -113,12 +109,7 @@ class AssociationView extends Taro.PureComponent {
     isOpened: false,
     choosing_code: '',
     currentTab: 0,
-    currentSide:0,
-    apartmentOpen: [
-      false,
-      true,
-    ],
-
+    currentSide: 0,
   }
   handleJoinClick = () => {
     this.setState({
@@ -142,7 +133,7 @@ class AssociationView extends Taro.PureComponent {
     this.props.dispatch({
       type: 'association/joinAssociation',
       payload: {
-        schoolId: this.prosp.schoolId,
+        schoolId: this.props.schoolId,
         associationId: this.props.association.id,
         choosing_code: this.state.choosing_code,
       }
@@ -220,7 +211,6 @@ class AssociationView extends Taro.PureComponent {
     })
   }
   handleDelMembers = (id)=> {
-    console.log(123)
     this.props.dispatch({
       type: 'association/delAssociationMembers',
       payload: {
@@ -258,7 +248,6 @@ class AssociationView extends Taro.PureComponent {
     const TAB_LIST = this.renderTabList()
     return (
       <View className='association-view'>
-
          <View className='association-header'>
            <View className='action-bar'>
              <View>
@@ -274,11 +263,6 @@ class AssociationView extends Taro.PureComponent {
                </AtButton>}
              </View>
            </View>
-          <View className='avatar'>
-            <HoAvatar
-              url={Img1}
-            />
-          </View>
           <View className='title'>
             {this.props.association.name}
           </View>
@@ -291,6 +275,7 @@ class AssociationView extends Taro.PureComponent {
             <AtTabsPane current={this.state.currentTab} index={1}>
               <View>
                 <DepartmentGrid
+                  isLoading={this.props.isLoading}
                   canManage={this.props.canManage}
                   departmentData={this.props.departmentList}
                   association={this.props.association}

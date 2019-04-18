@@ -1,0 +1,63 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+
+.ho-tabbar-view {
+  height: 4.5em;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #ffffff;
+  z-index: 999;
+  border-top: 1px solid #e8e8e8;
+  box-shadow: 0 0 10px 1px hsla(0,0%,75%,.45);
+  .tabbar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .icon {
+      margin-top: .5em;
+    }
+    .title {
+      margin-top: .2em;
+      color: #595959;
+      font-size: .8em;
+    }
+  }
+}
+
+.home-icon{
+  height: 1.5em;
+  width: 1.5em;
+  background-image: url("../../static/icon/home2.png");
+  background-size: 100%;
+}
+.message-icon{
+  height: 1.5em;
+  width: 1.5em;
+  background-image: url("../../static/icon/message.png");
+  background-size: 100%;
+}
+.account-icon{
+  height: 1.5em;
+  width: 1.5em;
+  background-image: url("../../static/icon/account.png");
+  background-size: 100%;
+}
+
+.home-icon-hover{
+  height: 1.5em;
+  width: 1.5em;
+  background-image: url("../../static/icon/home3.png");
+  background-size: 100%;
+}
+.message-icon-hover{
+  height: 1.5em;
+  width: 1.5em;
+  background-image: url("../../static/icon/message-hover.png");
+  background-size: 100%;
+}
+.account-icon-hover{
+  height: 1.5em;
+  width: 1.5em;
+  background-image: url("../../static/icon/account-hover.png");
+  background-size: 100%;
+}
