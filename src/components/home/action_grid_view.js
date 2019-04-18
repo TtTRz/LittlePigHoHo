@@ -2,16 +2,23 @@ import Taro from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import { AtButton, AtInput, AtForm, AtRadio, AtMessage, message, AtToast, AtIcon, AtGrid} from 'taro-ui'
 import PropTypes from 'prop-types'
-
+import noop from 'lodash.noop'
 import './actuib_grid_view.scss';
 
 class ActionGridView extends Taro.PureComponent{
   static propTypes = {
     type: PropTypes.string.isRequired,
+    associationId: PropTypes.string,
+    onShowDrawer: PropTypes.func,
   };
+  static defaultProps = {
+    associationId: -1,
+    onShowDrawer: noop,
+  }
   state = {
 
   };
+
   association_list = [{
     key: 'association-list',
     iconClassname: '.all-asso-list',
@@ -20,14 +27,19 @@ class ActionGridView extends Taro.PureComponent{
   }, {
     key: 'my-department',
     iconClassname: '.department',
-    title: '我的部门'
-  },{
+    title: '部门'
+  }, {
     key: 'add_association',
     iconClassname: '.create-asso',
     title: '创建组织',
     url: '/pages/association/association_create_view'
-
+  }, {
+    key: 'association-manage',
+    iconClassname: '.manage',
+    title: '管理',
+    url: '/pages/association/association_view?id=',
   }];
+
   action_list = [{
     key: 'check',
     iconClassname: '.check',
@@ -43,10 +55,19 @@ class ActionGridView extends Taro.PureComponent{
   }];
 
   handleItemClick = (item) => {
-    console.log(item)
-    Taro.navigateTo({
-      url: item.url,
-    })
+    if(item.key==='association-manage') {
+      const url = item.url + this.props.associationId;
+      Taro.navigateTo({
+        url: url
+      })
+    } else if(item.key === 'notices') {
+      this.props.onShowDrawer();
+    } else {
+      Taro.navigateTo({
+        url: item.url,
+      })
+    }
+
   }
   render() {
     return (

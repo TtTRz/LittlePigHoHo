@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
   return {
     schoolId: state.account.school_id,
     associationId: state.association.entity.id,
-    department: state.association.department,
+    department: state.department.entity,
   }
 
 };
@@ -35,7 +35,7 @@ class DepartmentView extends Taro.PureComponent {
 
   componentDidShow() {
     this.props.dispatch({
-      type: 'association/getDepartmentEntity',
+      type: 'department/getDepartmentEntity',
       payload: {
         schoolId: this.props.schoolId,
         associationId: this.props.associationId,
@@ -87,11 +87,6 @@ class DepartmentView extends Taro.PureComponent {
             </View>
             <View className='button'>
             </View>
-          </View>
-          <View className='avatar'>
-            <HoAvatar
-              url={Img1}
-            />
           </View>
           <View className='title'>
             {get(this.props, 'department.name', '无')}

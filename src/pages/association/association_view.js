@@ -34,7 +34,7 @@ const mapStateToProps = (state) => {
     canManage,
     isMember,
     membersList: state.association.membersList,
-    departmentList: state.association.departmentList,
+    departmentList: state.department.list,
     schoolId,
     isLoading: state.loading.models['association'],
 
@@ -69,7 +69,7 @@ class AssociationView extends Taro.PureComponent {
           }
         })
         this.props.dispatch({
-          type: 'association/getDepartmentList',
+          type: 'department/getDepartmentList',
           payload: {
             schoolId: this.props.schoolId,
             associationId: this.$router.params.id,
@@ -96,7 +96,7 @@ class AssociationView extends Taro.PureComponent {
             }
         })
         this.props.dispatch({
-          type: 'association/getDepartmentList',
+          type: 'department/getDepartmentList',
           payload: {
             schoolId: this.props.schoolId,
             associationId: this.$router.params.id,

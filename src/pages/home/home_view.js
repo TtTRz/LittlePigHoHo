@@ -1,6 +1,18 @@
 import Taro from '@tarojs/taro'
 import { View, Button, Text, Swiper, SwiperItem, Image} from '@tarojs/components'
-import {AtButton, AtDrawer, AtIcon, AtTabBar, AtList, AtListItem, AtMessage, AtDivider} from 'taro-ui'
+import {
+  AtButton,
+  AtDrawer,
+  AtIcon,
+  AtTabBar,
+  AtList,
+  AtListItem,
+  AtMessage,
+  AtDivider,
+  AtFloatLayout,
+  AtTextarea,
+  AtCheckbox, AtActivityIndicator
+} from 'taro-ui'
 import {connect} from "@tarojs/redux";
 import PropTypes from 'prop-types';
 import UserInfoView from '../../components/home/userinfo_view';
@@ -18,6 +30,8 @@ const mapStateToProps = (state) => {
     account: state.account,
     associationList: state.association.list,
     association: state.association.myEntity,
+    departmentList: state.department.list,
+    isLoading: state.loading.global,
   }
 };
 
@@ -34,6 +48,10 @@ class HomeView extends Taro.PureComponent {
   state = {
     currentTab: 1,
     assoVisible: false,
+    isOpened: false,
+    value: '',
+    departVisible: false,
+    departmentCheckedList: [],
   };
 
   componentWillMount() {
@@ -71,6 +89,14 @@ class HomeView extends Taro.PureComponent {
           payload: ({
             schoolId: this.props.account.school_id,
             associationId: parseInt(Taro.getStorageSync('associationId'), 10),
+          })
+        }).then(() => {
+          this.props.dispatch({
+            type: 'department/getDepartmentList',
+            payload: {
+              schoolId: this.props.account.school_id,
+              associationId: parseInt(Taro.getStorageSync('associationId'), 10),
+            }
           })
         })
       } else {
@@ -119,18 +145,83 @@ class HomeView extends Taro.PureComponent {
       url: this.ACCOUNT_VIEW_PATH[value],
     })
   };
-
+  handleDepartChange = (value) => {
+    this.setState({
+      departmentCheckedList: value
+    })
+  }
   handleAssoChange = () => {
     this.setState({
       assoVisible: true,
     })
   };
-
+  handleSubmitClick = () => {
+    // this.props.dispatch({
+    //   type: '',
+    //   payload: {
+    //
+    //   }
+    // })
+    this.setState({
+      value: '',
+      assoVisible: false,
+      isOpened: false,
+      departVisible: false,
+      departmentCheckedList: [],
+    })
+  }
+  handleShowDrawer = () => {
+    this.setState({
+      departVisible: true,
+    })
+  }
+  handleDepartClose = () => {
+    this.setState({
+      departVisible: false,
+    })
+  }
   renderAssoItems = () => {
-    if(this.props.associationList.length === 0) return null;
-
     return this.props.associationList.map((item) => {
       return (item.name)
+    })
+  }
+  handleInputChange = ({target}) => {
+    this.setState({
+      value: target.value,
+    })
+  }
+  renderCheckboxOption = () => {
+    if(this.props.association.role === 0) {
+      return null;
+    } else {
+      let checkbox = [{
+        value: 'all',
+        label: '全部',
+      }]
+      if(this.props.departmentList.length === 0) {
+        return checkbox;
+      }
+      this.props.departmentList.forEach((item) => {
+        checkbox.push({
+          value: item.id,
+          label: item.name,
+          disabled: this.state.departmentCheckedList.includes('all')
+        })
+      })
+      return checkbox;
+    }
+
+  }
+  handleFloatClose = () => {
+    this.setState({
+      isOpened: false,
+
+    })
+  }
+  handleShowFloat = () => {
+    this.setState({
+      departVisible: false,
+      isOpened: true,
     })
   }
   render() {
@@ -175,10 +266,10 @@ class HomeView extends Taro.PureComponent {
             </Swiper>
           </View>
           <View className='home-view-action-grid'>
-            <ActionGridView type='action' />
+            <ActionGridView type='action' onShowDrawer={this.handleShowDrawer} associationId={this.props.association.id} />
           </View>
           <View className='home-view-action-grid'>
-            <ActionGridView type='association' />
+            <ActionGridView type='association' associationId={this.props.association.id} />
           </View>
         </View>}
         {this.state.currentTab === 2 && <View className='account-view'>
@@ -218,12 +309,6 @@ class HomeView extends Taro.PureComponent {
             </AtList>
           </View>
         </View>}
-        {/*<AtTabBar*/}
-          {/*fixed*/}
-          {/*tabList={this.TABLIST}*/}
-          {/*current={this.state.currentTab}*/}
-          {/*onClick={this.handleTabChange.bind(this)}*/}
-        {/*/>*/}
         <HoTabBar
           current={this.state.currentTab}
           onClick={this.handleTabChange}
@@ -238,6 +323,55 @@ class HomeView extends Taro.PureComponent {
           mask
           onClose={this.handleAssoClose}
         >
+        </AtDrawer>
+        {/*发布通知*/}
+        <AtFloatLayout  isOpened={this.state.isOpened} title='通知信息' onClose={this.handleFloatClose}>
+          <View className='float-layout'>
+            <AtTextarea
+              value={this.state.value}
+              onChange={this.handleInputChange.bind(this)}
+              maxLength={200}
+              height={200}
+              placeholder='请输入您发布的通知'
+            />
+            <View className='float-layout-button'>
+              <AtButton
+                style={{bottom: '0'}}
+                type='primary'
+                onClick={this.handleSubmitClick}
+                full
+              >
+                发布
+              </AtButton>
+            </View>
+          </View>
+        </AtFloatLayout>
+        <AtDrawer
+          show={this.state.departVisible}
+          right
+          onClose={this.handleDepartClose}
+          mask
+        >
+          {this.props.isLoading ? <View style={{ position: 'relative', marginTop: '5em'}}>
+            <AtActivityIndicator mode='center'></AtActivityIndicator>
+          </View> : <View>
+            <AtCheckbox
+              options={this.renderCheckboxOption()}
+              selectedList={this.state.departmentCheckedList}
+              onChange={this.handleDepartChange}
+            />
+            <View
+              style={{ marginTop: '5em'}}
+            >
+              <AtButton
+                disabled={this.state.departmentCheckedList.length === 0}
+                type='primary'
+                onClick={this.handleShowFloat}
+              >
+                确认
+              </AtButton>
+            </View>
+          </View>}
         </AtDrawer>
       </View>
     )

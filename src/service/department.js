@@ -1,6 +1,6 @@
 import PathToRegexp from 'path-to-regexp';
-import {API} from "src/constants/apis";
-import Request from "src/utils/request";
+import {API} from "../constants/apis";
+import Request from "../utils/request";
 
 export const getDepartmentList = (payload ) => {
   const pattern = PathToRegexp.compile(API.ASSOCIATION.DEPARTMENT.LIST);

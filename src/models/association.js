@@ -59,9 +59,14 @@ export default {
     *getAssociationEntityMe({ payload }, {call, put, select }) {
       const result = yield call(association.getAssociationEntity, {schoolId: payload.schoolId, associationId: payload.associationId });
       const { data } = result.data;
+      const role = yield select(state => state.account.associations.filter((item) => item.association_id === payload.associationId))
+      console.log(role);
       yield put({
         type: 'saveAssociationMe',
-        payload: data,
+        payload: {
+          ...data,
+          role: role[0].role,
+        },
       })
       return data;
     },

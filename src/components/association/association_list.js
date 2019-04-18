@@ -72,7 +72,7 @@ class AssociationList extends Taro.PureComponent {
           </AtList>}
         </View>}
         {this.props.associationListData.length === 0 && <AtLoadMore
-          status="noMore"
+          status='noMore'
           noMoreText={this.props.me ? '您暂未加入组织' : '暂无组织'}
         />}
       </View>

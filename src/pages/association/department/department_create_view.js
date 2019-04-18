@@ -35,9 +35,9 @@ class DepartmentCreateView extends Taro.PureComponent {
   };
 
   handleCreateClick = (payload) => {
-
+    console.log(payload)
     this.props.dispatch({
-      type: 'association/addDepartment',
+      type: 'department/addDepartment',
       payload: {
         ...payload,
         associationId: this.$router.params.aid,

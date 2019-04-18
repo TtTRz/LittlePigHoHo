@@ -1,6 +1,5 @@
 import Taro from '@tarojs/taro';
 import * as department from '../service/department'
-import * as association from "src/service/association";
 
 export default {
   namespace: 'department',
