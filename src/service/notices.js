@@ -14,6 +14,18 @@ export const getNoticesList = (payload) => {
       }
     })
   )
+};
+export const fetchNoticesEntities = (payload) => {
+  const pattern = PathToRegexp.compile(API.NOTICES.MGET);
+  return (
+    Request({
+      url: pattern({ sid: payload.schoolId, aid: payload.associationId }),
+      method: 'post',
+      data: {
+        ids: payload.ids,
+      }
+    })
+  )
 }
 export const addNotices = (payload) => {
   const pattern = PathToRegexp.compile(API.NOTICES.ADD);

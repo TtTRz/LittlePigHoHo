@@ -42,9 +42,9 @@ class App extends Component {
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#096dd9',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarBackgroundColor: 'white',
+      navigationBarTitleText: 'LPHH',
+      navigationBarTextStyle: 'black',
     }
   }
 

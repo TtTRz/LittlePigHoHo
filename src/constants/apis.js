@@ -35,6 +35,7 @@ export const API = {
     LIST: 'schools/:sid/associations/:aid/notices/list',
     ADD: 'schools/:sid/associations/:aid/notices',
     CURD: 'schools/:sid/associations/:aid/notices/:nid',
+    MGET: 'schools/:sid/associations/:aid/notices/_mget',
   }
 
 };

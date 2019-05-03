@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro';
-import * as notices from '../service/notices'
+import * as notice from '../service/notices'
 
 export default {
   namespace: 'notices',
@@ -9,14 +9,34 @@ export default {
   },
   effects: {
     *getNoticesList({ payload }, { call, put, select }) {
-      const req = yield call(notices.getNoticesList, payload);
+      const req = yield call(notice.getNoticesList, payload);
+      const { data } = req;
+      const { notices } = data;
+      const ids = notices.map((item) => {
+        return item.id;
+      })
+      yield put({
+        type: 'fetchNoticesEntities',
+        payload: {
+          ids,
+          schoolId: payload.schoolId,
+          associationId: payload.associationId,
+        }
+      })
+    },
+    *addNotices({ payload }, { call, put, select }) {
+      const req = yield call(notice.addNotices, payload);
       const { data } = req;
       console.log(data);
     },
-    *addNotices({ payload }, { call, put, select }) {
-      const req = yield call(notices.addNotices, payload);
+    *fetchNoticesEntities({ payload }, { call, put, select }) {
+      const req = yield call(notice.fetchNoticesEntities, payload);
       const { data } = req;
       console.log(data);
+      yield put({
+        type:'saveAssoNoticesList',
+        payload: data.data,
+      })
     }
   },
   reducers: {
