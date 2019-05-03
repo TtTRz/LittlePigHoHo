@@ -1,0 +1,65 @@
+@import'../../assets/scss/color';
+.create-notice-view {
+  .progress-bar{
+    height: 1em;
+    padding: .5em;
+  }
+  .content{
+    height: calc(100vh - 2em);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .body{
+      height: calc(100% - 3em);
+    }
+    .picker{
+      position:relative;
+      padding: 24rpx 0;
+      color:#333;
+      background-color:#FFF;
+      margin-left: 32rpx;
+      margin-bottom: 1PX;
+      display: flex;
+      border-bottom: 0.5px solid #d6e4ef;
+      .label {
+        margin-right:16rpx;
+        width:172rpx;
+        font-size:32rpx;
+        line-height:1.5;
+        vertical-align:middle;
+        text-align:left;
+      }
+      .value {
+        font-size:32rpx;
+        line-height:1.5;
+        height:auto !important;
+        min-height:auto !important;
+
+      }
+
+    }
+    .title{
+      font-weight: bold;
+      font-size: 1.3em;
+      color: $grey-8;
+      padding: 1em .5em;
+      padding-top: 0.2em;
+    }
+    .input-area{
+      height: 16em;
+      display: flex;
+      padding: .5em;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+    .button-bar{
+      height: 3em;
+      padding: .5em;
+      padding-bottom: 1em;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+
+  }
+}

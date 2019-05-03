@@ -71,12 +71,7 @@ export default {
       return data;
     },
     *getAssociationListMe({ payload }, { call, put, select }) {
-      // yield put({
-      //   type: 'account/accountMe',
-      //   payload: {token: Taro.getStorageSync('token')}
-      // });
       const ids = yield select(state => state.account.associations);
-      console.log(ids, '123123123')
       if(ids.length !==0 ){
         const assIds = ids.map((item) => {
           return item.association_id;

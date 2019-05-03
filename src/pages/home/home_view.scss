@@ -61,3 +61,40 @@
   height: 75vh;
   background: #fff;
 }
+.associationLeaderIcon {
+  height: 1em;
+  width: 1em;
+  background-image: url("../../static/icon/associationLeader.png");
+  background-size: 100%;
+}
+.departmentLeaderIcon {
+  height: 1em;
+  width: 1em;
+  background-image: url("../../static/icon/departLeader.png");
+  background-size: 100%;
+}
+
+.ho-list-item {
+  padding: .5em;
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box;
+  color:#333;
+  line-height:1.5;
+  -webkit-transition:background-color 0.3s;
+  -o-transition:background-color 0.3s;
+  transition:background-color 0.3s;
+  font-size: 1em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 0 solid #d6e4ef;
+}
+.ho-list-item:active {
+  background-color: #f0f0f0;
+}
+.ho-list-item-divider {
+  border: 0 solid #d6e4ef;
+  transform: scale(.95);
+  border-bottom-width: 0.5px;
+}

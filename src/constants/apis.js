@@ -13,6 +13,7 @@ export const API = {
     MGET: 'schools/_mget',
   },
   ASSOCIATION: {
+    ACCOUNT: 'schools/:sid/associations/:aid/accounts/:acid',
     LIST: 'schools/:sid/associations/list',
     ADD: 'schools/:sid/associations',
     CURD: 'schools/:sid/associations/:aid',
@@ -32,6 +33,8 @@ export const API = {
   },
   NOTICES: {
     LIST: 'schools/:sid/associations/:aid/notices/list',
+    ADD: 'schools/:sid/associations/:aid/notices',
+    CURD: 'schools/:sid/associations/:aid/notices/:nid',
   }
 
 };

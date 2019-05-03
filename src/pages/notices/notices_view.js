@@ -15,7 +15,6 @@ const mapStateToProps = (state) => {
 
 @connect(mapStateToProps, null)
 class NoticesView extends Taro.PureComponent {
-
   noticesList = [{
     association: {
       name: '泰罗小队'

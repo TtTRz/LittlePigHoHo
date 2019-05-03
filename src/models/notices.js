@@ -12,6 +12,11 @@ export default {
       const req = yield call(notices.getNoticesList, payload);
       const { data } = req;
       console.log(data);
+    },
+    *addNotices({ payload }, { call, put, select }) {
+      const req = yield call(notices.addNotices, payload);
+      const { data } = req;
+      console.log(data);
     }
   },
   reducers: {

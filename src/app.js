@@ -38,10 +38,11 @@ class App extends Component {
       'pages/association/association_view',
       'pages/association/department/department_create_view',
       'pages/association/department/department_view',
+      'pages/notices/create_notice_view',
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
+      navigationBarBackgroundColor: '#096dd9',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
     }

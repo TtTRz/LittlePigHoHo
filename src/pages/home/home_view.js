@@ -13,6 +13,7 @@ import {
   AtTextarea,
   AtCheckbox, AtActivityIndicator
 } from 'taro-ui'
+import  get  from 'lodash.get';
 import {connect} from "@tarojs/redux";
 import PropTypes from 'prop-types';
 import UserInfoView from '../../components/home/userinfo_view';
@@ -20,9 +21,7 @@ import ActionGridView from '../../components/home/action_grid_view'
 import './home_view.scss'
 import Img1 from '../../static/img/lphh.jpeg'
 import NoticesView from '../notices/notices_view'
-import  get  from 'lodash.get';
 import HoTabBar from "../../components/widgets/HoTabBar";
-
 
 const mapStateToProps = (state) => {
 
@@ -145,11 +144,7 @@ class HomeView extends Taro.PureComponent {
       url: this.ACCOUNT_VIEW_PATH[value],
     })
   };
-  handleDepartChange = (value) => {
-    this.setState({
-      departmentCheckedList: value
-    })
-  }
+
   handleAssoChange = () => {
     this.setState({
       assoVisible: true,
@@ -170,9 +165,9 @@ class HomeView extends Taro.PureComponent {
       departmentCheckedList: [],
     })
   }
-  handleShowDrawer = () => {
-    this.setState({
-      departVisible: true,
+  handleCreateNoticesClick = () => {
+    Taro.navigateTo({
+      url: '/pages/notices/create_notice_view'
     })
   }
   handleDepartClose = () => {
@@ -180,11 +175,7 @@ class HomeView extends Taro.PureComponent {
       departVisible: false,
     })
   }
-  renderAssoItems = () => {
-    return this.props.associationList.map((item) => {
-      return (item.name)
-    })
-  }
+
   handleInputChange = ({target}) => {
     this.setState({
       value: target.value,
@@ -210,7 +201,6 @@ class HomeView extends Taro.PureComponent {
       })
       return checkbox;
     }
-
   }
   handleFloatClose = () => {
     this.setState({
@@ -266,10 +256,10 @@ class HomeView extends Taro.PureComponent {
             </Swiper>
           </View>
           <View className='home-view-action-grid'>
-            <ActionGridView type='action' onShowDrawer={this.handleShowDrawer} associationId={this.props.association.id} />
+            <ActionGridView type='action' role={this.props.association.role} onCreateNoticesClick={this.handleCreateNoticesClick} associationId={this.props.association.id} />
           </View>
           <View className='home-view-action-grid'>
-            <ActionGridView type='association' associationId={this.props.association.id} />
+            <ActionGridView type='association'role={this.props.association.role}  associationId={this.props.association.id} />
           </View>
         </View>}
         {this.state.currentTab === 2 && <View className='account-view'>
@@ -318,61 +308,71 @@ class HomeView extends Taro.PureComponent {
         <AtDrawer
           right
           show={this.state.assoVisible}
-          items={this.renderAssoItems()}
-          onItemClick={this.handleAssoItemsClick}
           mask
           onClose={this.handleAssoClose}
         >
+            {this.props.associationList.map((item, index) => {
+              return (<View>
+                <View className='ho-list-item' onClick={this.handleAssoItemsClick.bind(this, index)} >
+                {item.name}
+                {item.role !== 0 && <View className={item.role === 1 ? 'departmentLeaderIcon': 'associationLeaderIcon'}>
+                  </View>}
+                </View>
+                <View className='ho-list-item-divider'>
+
+                </View>
+              </View>)
+            })}
         </AtDrawer>
         {/*发布通知*/}
-        <AtFloatLayout  isOpened={this.state.isOpened} title='通知信息' onClose={this.handleFloatClose}>
-          <View className='float-layout'>
-            <AtTextarea
-              value={this.state.value}
-              onChange={this.handleInputChange.bind(this)}
-              maxLength={200}
-              height={200}
-              placeholder='请输入您发布的通知'
-            />
-            <View className='float-layout-button'>
-              <AtButton
-                style={{bottom: '0'}}
-                type='primary'
-                onClick={this.handleSubmitClick}
-                full
-              >
-                发布
-              </AtButton>
-            </View>
-          </View>
-        </AtFloatLayout>
-        <AtDrawer
-          show={this.state.departVisible}
-          right
-          onClose={this.handleDepartClose}
-          mask
-        >
-          {this.props.isLoading ? <View style={{ position: 'relative', marginTop: '5em'}}>
-            <AtActivityIndicator mode='center'></AtActivityIndicator>
-          </View> : <View>
-            <AtCheckbox
-              options={this.renderCheckboxOption()}
-              selectedList={this.state.departmentCheckedList}
-              onChange={this.handleDepartChange}
-            />
-            <View
-              style={{ marginTop: '5em'}}
-            >
-              <AtButton
-                disabled={this.state.departmentCheckedList.length === 0}
-                type='primary'
-                onClick={this.handleShowFloat}
-              >
-                确认
-              </AtButton>
-            </View>
-          </View>}
-        </AtDrawer>
+        {/*<AtFloatLayout  isOpened={this.state.isOpened} title='通知信息' onClose={this.handleFloatClose}>*/}
+          {/*<View className='float-layout'>*/}
+            {/*<AtTextarea*/}
+              {/*value={this.state.value}*/}
+              {/*onChange={this.handleInputChange.bind(this)}*/}
+              {/*maxLength={200}*/}
+              {/*height={200}*/}
+              {/*placeholder='请输入您发布的通知'*/}
+            {/*/>*/}
+            {/*<View className='float-layout-button'>*/}
+              {/*<AtButton*/}
+                {/*style={{bottom: '0'}}*/}
+                {/*type='primary'*/}
+                {/*onClick={this.handleSubmitClick}*/}
+                {/*full*/}
+              {/*>*/}
+                {/*发布*/}
+              {/*</AtButton>*/}
+            {/*</View>*/}
+          {/*</View>*/}
+        {/*</AtFloatLayout>*/}
+        {/*<AtDrawer*/}
+          {/*show={this.state.departVisible}*/}
+          {/*right*/}
+          {/*onClose={this.handleDepartClose}*/}
+          {/*mask*/}
+        {/*>*/}
+          {/*{this.props.isLoading ? <View style={{ position: 'relative', marginTop: '5em'}}>*/}
+            {/*<AtActivityIndicator mode='center'></AtActivityIndicator>*/}
+          {/*</View> : <View>*/}
+            {/*<AtCheckbox*/}
+              {/*options={this.renderCheckboxOption()}*/}
+              {/*selectedList={this.state.departmentCheckedList}*/}
+              {/*onChange={this.handleDepartChange}*/}
+            {/*/>*/}
+            {/*<View*/}
+              {/*style={{ marginTop: '5em'}}*/}
+            {/*>*/}
+              {/*<AtButton*/}
+                {/*disabled={this.state.departmentCheckedList.length === 0}*/}
+                {/*type='primary'*/}
+                {/*onClick={this.handleShowFloat}*/}
+              {/*>*/}
+                {/*确认*/}
+              {/*</AtButton>*/}
+            {/*</View>*/}
+          {/*</View>}*/}
+        {/*</AtDrawer>*/}
       </View>
     )
   }
