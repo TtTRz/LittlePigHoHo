@@ -39,3 +39,10 @@ export const changeSchool = (payload) => {
     }
   })
 };
+
+export const getDashboard = (payload) => {
+  return Request({
+    url: API.ACCOUNT.DASHBOARD,
+    method: 'get',
+  })
+}

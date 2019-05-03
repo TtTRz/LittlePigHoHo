@@ -39,12 +39,21 @@ class App extends Component {
       'pages/association/department/department_create_view',
       'pages/association/department/department_view',
       'pages/notices/create_notice_view',
+      'pages/attendances/attendances_list_view',
+      'pages/attendances/attendances_view',
+      'pages/attendances/create_attendances_view',
+
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: 'white',
       navigationBarTitleText: 'LPHH',
       navigationBarTextStyle: 'black',
+    },
+    permission: {
+      "scope.userLocation": {
+        desc: '将获取您的位置信息'
+      }
     }
   }
 

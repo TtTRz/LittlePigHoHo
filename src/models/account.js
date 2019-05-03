@@ -5,6 +5,7 @@ export default {
   namespace: 'account',
   state: {
     id: '',
+    dashboard: {},
   },
 
   effects: {
@@ -62,12 +63,22 @@ export default {
         payload: {token: Taro.getStorageSync('token')}
       });
     },
-
+    *getDashboard({ payload }, {call, put, select }) {
+      const req = yield call(account.getDashboard, payload);
+      const { data } = req;
+      yield put({
+        type: 'saveDashboard',
+        payload: data,
+      })
+    }
   },
 
   reducers: {
     save(state, { payload }) {
       return { ...state, ...payload, avator: Taro.getStorageSync('avator')};
     },
+    saveDashboard(state, { payload }) {
+      return { ...state, dashboard: payload.data }
+    }
   },
 };

@@ -10,14 +10,11 @@ const mapStateToProps = (state) => {
   const account = state.account;
   const schoolId = state.account.school_id;
   const association = state.association.myEntity;
-  const noticesList = state.notices.assoNoticesList;
-  const associationList = state.association.list;
+
   return {
     isLoading,
     schoolId,
     association,
-    noticesList,
-    associationList,
     account,
   };
 };
@@ -37,12 +34,18 @@ class NoticesView extends Taro.PureComponent {
 
   }
   componentDidMount() {
-    this.props.dispatch({
-      type: 'notices/getNoticesList',
-      payload: {
-        schoolId: this.props.schoolId,
-        associationId: this.props.association.id,
+    Taro.getSetting({
+      success: (res) => {
+        if(!res.authSetting['scope.userLocation']) {
+          Taro.authorize({
+            scope: 'scope.userLocation',
+          })
+        }
       }
+    })
+    this.props.dispatch({
+      type: 'account/getDashboard',
+      payload: {},
     }).then(() => {
       Taro.hideLoading()
     })
@@ -52,44 +55,51 @@ class NoticesView extends Taro.PureComponent {
     notice: {},
   }
   handleShowModal = (item) => {
-    console.log('show',this.state)
     this.setState({
       isOpened: true,
       notice: item,
     })
   }
   renderNote= (item) => {
-    const date = moment.unix(get(item,'update_time', '')).format('YYYY-MM-DD')
+    const date = moment.unix(get(item,'start_time', '')).format('YYYY-MM-DD')
     const author = get(item,'author.nickname', '未知');
     return author + " " + date;
-  }
-  renderTitle = (item) => {
-    const i = this.props.associationList.filter((a) => a.id === item.association.id);
-    return i[0].name;
   }
   handleCloseModal = () => {
     this.setState({
       isOpened: false,
       notice: {},
     })
-    console.log(this.state)
+  }
+  renderNoticesList = () => {
+    let noticeList = [];
+    for( let i in this.props.account.dashboard.notices) {
+      let item = this.props.account.dashboard.notices[i];
+      item.forEach((it) => {
+        noticeList.push({...it, name: i});
+      })
+    }
+    noticeList.sort((a, b) => {
+      return b.start_time - a.start_time;
+    })
+    return noticeList;
   }
   render() {
-    const noticesList = this.props.noticesList;
+    const noticesList = this.renderNoticesList()
     return (
       <View className='notices-view'>
         {noticesList.length === 0 && <View style={{ margin: '1em auto'}}>
           暂无通知
         </View>}
         {noticesList.length !== 0 && <View className='notices-list'>
-          {noticesList.map((item) => {
+          {noticesList.map((item, index) => {
             return (
-              <View className='card'>
+              <View key={index} className='card'>
                 <AtCard
                   onClick={this.handleShowModal.bind(this,item)}
                   note={this.renderNote(item)}
-                  title={this.renderTitle(item)}
-                  extra={get(item, 'department', '部门')}
+                  title={item.name}
+                  extra={get(item, 'department', '')}
                 >
                   <View>
                     标题: {item.title}
@@ -117,7 +127,7 @@ class NoticesView extends Taro.PureComponent {
                   {this.state.notice.author.nickname}
                 </View>
                 <View className='date'>
-                  {moment.unix(get(this.state.notice,'update_time', '')).format('YYYY-MM-DD')}
+                  {moment.unix(get(this.state.notice,'start_time', '')).format('YYYY-MM-DD')}
                 </View>
               </View>
             </View>

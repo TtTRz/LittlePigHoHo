@@ -5,6 +5,7 @@ export const API = {
     ME: 'accounts/me',
     CURD: 'accounts/:aid',
     CHANGE_SCHOOL: 'accounts/update_id',
+    DASHBOARD: 'accounts/dashboard',
   },
   SCHOOL: {
     LIST: 'schools/list',
@@ -29,6 +30,15 @@ export const API = {
       MGET: 'schools/:sid/associations/:aid/departments/_mget',
       ADD: 'schools/:sid/associations/:aid/departments',
       CURD: 'schools/:sid/associations/:aid/departments/:did',
+    },
+    ATTENDANCES: {
+      ADD: 'schools/:sid/associations/:aid/attendances',
+      CURD: 'schools/:sid/associations/:aid/attendances/:vid',
+      LIST: 'schools/:sid/associations/:aid/attendances/list',
+      MGET: 'schools/:sid/associations/:aid/attendances/_mget',
+      LEAVE: 'schoosl/:sid/associations/:aid/attendances/:vid/leave',
+      MANAGE: 'schools/:sid/associations/:aid/attendances/:vid/manage',
+      SIGN: 'schools/:sid/associations/:aid/attendances/:vid/sign',
     }
   },
   NOTICES: {

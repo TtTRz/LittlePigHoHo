@@ -125,7 +125,6 @@ class ActionGridView extends Taro.PureComponent{
     const action_list = this.renderActionList();
     return (
      <View>
-       {console.log(this.props.role)}
        {this.props.type === 'association' &&  <View className='action-grid-view'>
          <View className='grid-title'>
            组织
