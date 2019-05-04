@@ -41,3 +41,15 @@ export const fetchAttendancesEntities = (payload) => {
   })
 }
 
+export const signAttendances = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.SIGN);
+  return Request({
+    url: pattern({ sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId }),
+    method: 'get',
+    params: {
+      lx: payload.place_x,
+      ly: payload.place_y,
+    }
+  })
+}
+

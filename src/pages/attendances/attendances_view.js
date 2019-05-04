@@ -27,14 +27,14 @@ class AttendancesView extends Taro.PureComponent {
   }
 
   componentDidMount() {
-    const attendances = this.props.attendancesList.filter((item) => item.id === this.props.$router.aid);
+    const attendances = this.props.attendancesList.filter((item) => item.id === parseInt(this.$router.params.aid));
     Taro.getLocation({
       type: 'gcj02',
       success: (res) => {
         const { latitude } = res;
         const { longitude } = res;
         this.setState({
-          attendances: attendances,
+          attendances: attendances[0],
           personLocation: {
             place_x: latitude,
             place_y: longitude,
@@ -44,25 +44,45 @@ class AttendancesView extends Taro.PureComponent {
       }
     })
   }
-
+  handleSignClick = () => {
+    this.props.dispatch({
+      type: 'attendances/signAttendances',
+      payload: {
+        place_x: this.state.personLocation.place_x,
+        place_y: this.state.personLocation.place_y,
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
+      }
+    })
+  };
   render() {
+    {console.log(this.state)}
     return (
       <View className='attendances-view'>
         <View className='map'>
           {this.state.isMounted && <Map
+            style={{ width: '100%', height: '12em'}}
             longitude={this.state.attendances.place_y}
             latitude={this.state.attendances.place_x}
             enable-scoll={false}
             markers={[{id: 1, latitude: this.state.personLocation.place_x, longitude: this.state.personLocation.place_y}]}
             circles={[{ latitude: this.state.attendances.place_x, longitude: this.state.attendances.place_y, radius: this.state.attendances.distance, color: '#1890ff'}]}
-            scale={16}
+            scale={18}
           />}
         </View>
-        <View>
-
+        <View className='info'>
+          <View className='title'>
+            {this.state.attendances.title}
+          </View>
+          <View className='description'>
+            {this.state.attendances.description}
+          </View>
         </View>
-        <View>
-
+        <View className='action'>
+          <AtButton onClick={this.handleSignClick}>
+            签到
+          </AtButton>
         </View>
       </View>
     )

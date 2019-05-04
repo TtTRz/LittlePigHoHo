@@ -29,6 +29,11 @@ export default {
       const { data } = req.data;
       console.log(data);
     },
+    *signAttendances({ payload }, { call, put, select}) {
+      const req = yield call(attendances.signAttendances, payload);
+      const { data } = req.data;
+      console.log(data);
+    },
     *fetchAttendancesEntities({ payload }, { call, put, select }) {
       const req = yield call(attendances.fetchAttendancesEntities, (payload));
       const { data } = req.data;

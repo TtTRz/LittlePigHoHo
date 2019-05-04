@@ -65,6 +65,7 @@ class AttendancesListView extends Taro.PureComponent {
   }
   handleCardClick = (item) => {
     const url = '/pages/attendances/attendances_view?aid=' + item.id;
+    console.log(url)
     Taro.navigateTo({
       url: url,
     })
