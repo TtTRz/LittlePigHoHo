@@ -35,6 +35,7 @@
     "dev-cli": "0.0.0",
     "dva-core": "^1.4.0",
     "dva-loading": "^2.0.6",
+    "latest": "^0.2.0",
     "lodash": "^4.17.11",
     "lodash-es": "^4.17.11",
     "lodash.get": "^4.4.2",
@@ -49,7 +50,7 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "taro-ui": "^2.0.2"
+    "taro-ui": "^2.1.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.8",

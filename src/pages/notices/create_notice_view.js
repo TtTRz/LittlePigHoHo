@@ -29,32 +29,6 @@ class CreateNoticeView extends Taro.PureComponent{
     endDateSel: moment().format('YYYY-MM-DD'),
     status: 'progress',
   }
-  // renderCheckboxOption = () => {
-  //   if(this.props.association.role === 0) {
-  //     return null;
-  //   } else {
-  //     let checkbox = [{
-  //       value: 'all',
-  //       label: '全部',
-  //     }]
-  //     if(this.props.departmentList.length === 0) {
-  //       return checkbox;
-  //     }
-  //     this.props.departmentList.forEach((item) => {
-  //       checkbox.push({
-  //         value: item.id,
-  //         label: item.name,
-  //         disabled: this.state.departmentCheckedList.includes('all')
-  //       })
-  //     })
-  //     return checkbox;
-  //   }
-  // }
-  // handleDepartChange = (value) => {
-  //   this.setState({
-  //     departmentCheckedList: value
-  //   })
-  // }
   handleNextClick = () => {
     const { percent} = this.state;
     this.setState({

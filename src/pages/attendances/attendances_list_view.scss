@@ -5,6 +5,9 @@
   background: #fff;
   display: flex;
   flex-direction: column;
+  .attendances-button{
+    margin: .2em 1em;
+  }
   .attendances-list{
     padding: .2em;
     .card {

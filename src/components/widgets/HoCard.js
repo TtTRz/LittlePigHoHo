@@ -30,7 +30,7 @@ class HoCard extends Taro.PureComponent{
       <View className='ho-card'>
         <View className='header'>
           <View className='title'>
-            321
+            {this.props.title}
           </View>
           <View className='extra'>
             {this.props.type === 'attendances' && <View className={'tag ' + `tag_${this.props.extra}`}>
