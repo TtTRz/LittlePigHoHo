@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/romchung/.nvm/versions/node/v11.6.0/bin/node /Users/romchung/.nvm/versions/node/v11.6.0/bin/yarn add dva-core --silent --no-progress
+  /Users/romchung/.nvm/versions/node/v11.6.0/bin/node /Users/romchung/.nvm/versions/node/v11.6.0/bin/yarn add src/pages/notices/notices_view --silent --no-progress
 
 PATH: 
   /Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin
@@ -14,7 +14,17 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, copyfile '/Users/romchung/Library/Caches/Yarn/v4/npm-warning-3.0.0-32e5377cb572de4ab04753bdf8821c01ed605b7c/node_modules/warning/CHANGELOG.md' -> '/Users/romchung/Desktop/LittlePigHoHo/node_modules/dva-core/node_modules/warning/CHANGELOG.md'
+  Error: https://r.cnpmjs.org/src%2fpages/notices/notices_view: [not_found] document not found
+      at Request.params.callback [as _callback] (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:66058:18)
+      at Request.self.callback (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:129541:22)
+      at Request.emit (events.js:188:13)
+      at Request.<anonymous> (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:130513:10)
+      at Request.emit (events.js:188:13)
+      at Gunzip.<anonymous> (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:130435:12)
+      at Object.onceWrapper (events.js:276:13)
+      at Gunzip.emit (events.js:193:15)
+      at endReadableNT (_stream_readable.js:1129:12)
+      at process.internalTickCallback (internal/process/next_tick.js:72:19)
 
 npm manifest: 
   {

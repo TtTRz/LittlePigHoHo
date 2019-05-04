@@ -1,0 +1,19 @@
+@import '../../assets/scss/color';
+.attendances-list-view {
+  height: 100vh;
+  width: 100%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  .attendances-list{
+    padding: .2em;
+    .card {
+      margin: .5em 0;
+    }
+  }
+  .attendances-bottom {
+    text-align: center;
+    height: 5em;
+    padding: 5em;
+  }
+}

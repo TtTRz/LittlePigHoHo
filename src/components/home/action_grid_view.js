@@ -112,6 +112,7 @@ class ActionGridView extends Taro.PureComponent{
       key: 'check',
       iconClassname: '.check',
       title: '考勤',
+      url: '/pages/attendances/attendances_list_view'
     }];
     if(this.props.role !== 0) {
       action_list_manage.forEach((item) => {
