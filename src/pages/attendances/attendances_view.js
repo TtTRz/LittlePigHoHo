@@ -1,9 +1,10 @@
 import Taro from '@tarojs/taro'
 import {View, Button, Text, Picker, Map} from "@tarojs/components";
 import { connect } from '@tarojs/redux';
-import {AtActivityIndicator, AtButton, AtCheckbox, AtProgress, AtIcon, AtTextarea, AtInput} from 'taro-ui'
+import {AtActivityIndicator, AtButton, AtCheckbox, AtProgress,AtToast,AtCountdown, AtIcon, AtTextarea, AtInput} from 'taro-ui'
 import './attendances_view.scss'
-
+import moment from 'moment'
+import {timeFromNow} from "../../utils/time_formatter";
 const mapStateToProps = (state) => {
 
   return {
@@ -18,6 +19,7 @@ const mapStateToProps = (state) => {
 class AttendancesView extends Taro.PureComponent {
 
   state = {
+    isOpened: false,
     attendances: {},
     personLocation: {
       place_x: 0,
@@ -54,10 +56,20 @@ class AttendancesView extends Taro.PureComponent {
         associationId: this.props.association.id,
         attendancesId: this.$router.params.aid,
       }
+    }).then(() => {
+      this.setState({
+
+      })
     })
   };
+  renderTimeCount = () => {
+    return timeFromNow(this.state.attendances.end_time);
+  };
+
   render() {
     {console.log(this.state)}
+    const timeCount = this.renderTimeCount();
+    console.log(timeCount)
     return (
       <View className='attendances-view'>
         <View className='map'>
@@ -78,12 +90,23 @@ class AttendancesView extends Taro.PureComponent {
           <View className='description'>
             {this.state.attendances.description}
           </View>
+          <View className='time-countdown'>
+
+            <AtCountdown
+              isShowDay={timeCount.day !== 0}
+              day={timeCount.day}
+              hours={timeCount.hour}
+              minutes={timeCount.minute}
+              seconds={timeCount.second}
+            />
+          </View>
         </View>
         <View className='action'>
           <AtButton onClick={this.handleSignClick}>
             签到
           </AtButton>
         </View>
+
       </View>
     )
   }

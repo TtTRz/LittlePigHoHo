@@ -4,6 +4,7 @@ import { connect } from '@tarojs/redux';
 import {AtActivityIndicator, AtButton, AtCheckbox, AtListItem, AtProgress,AtSwitch, AtIcon, AtTextarea, AtInput} from 'taro-ui'
 import './create_attendances_view.scss'
 import moment from "moment";
+
 const mapStateToProps = (state) => {
 
   return {
