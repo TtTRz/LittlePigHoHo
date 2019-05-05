@@ -53,3 +53,13 @@ export const signAttendances = (payload) => {
   })
 }
 
+export const leaveAttendances = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.LEAVE);
+  return Request({
+    url: pattern({ sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId }),
+    method: 'post',
+    data: {
+      description: payload.description,
+    }
+  })
+}

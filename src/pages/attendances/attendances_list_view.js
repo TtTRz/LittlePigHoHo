@@ -93,7 +93,7 @@ class AttendancesListView extends Taro.PureComponent {
                type='attendances'
                note={this.renderTime(item)}
                title={item.title}
-               extra={item.status}
+               extra={item}
                content={item.description}
              />
            </View>

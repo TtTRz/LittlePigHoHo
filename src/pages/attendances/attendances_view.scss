@@ -13,8 +13,54 @@
       font-weight: bold;
       font-size: 1.1em;
       color: $grey-8;
-      padding: 1em .5em;
+      padding: .2em .5em;
+    }
+    .tag-bar{
+      padding: 1em .6em;
       padding-top: 0.2em;
+      -webkit-flex:0 0 auto;
+      -ms-flex:0 0 auto;
+      flex:0 0 auto;
+      -webkit-box-flex:0;
+      max-width:120rpx;
+      color:#2C405A;
+      font-size:28rpx;
+      overflow:hidden;
+      -o-text-overflow:ellipsis;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      line-height:1.5;
+
+      .tag{
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        padding: 0 .5em;
+      }
+      .tag_1{
+        color: #52c41a;
+        background: #f6ffed;
+        border-color: #b7eb8f;
+      }
+      .tag_0 {
+        color: #fa541c;
+        background: #fff2e8;
+        border-color: #ffbb96;
+      }
+      .tag_-1{
+        color: #1890ff;
+        background: #e6f7ff;
+        border-color: #91d5ff;
+      }
+      .tag_2 {
+        color: #faad14;
+        background: #fffbe6;
+        border-color: #ffe58f;
+      }
+      .tag_3 {
+        color: #13c2c2;
+        background: #e6fffb;
+        border-color: #87e8de;
+      }
     }
     .description {
       padding: 1em .5em;
@@ -22,6 +68,13 @@
     }
   }
   .action {
-    padding: .5em;
+    padding: 1em;
+
+  }
+  .leave {
+    padding: 0 1em;
+  }
+  .button {
+    padding: .5em 1em;
   }
 }

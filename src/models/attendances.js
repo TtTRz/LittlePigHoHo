@@ -34,6 +34,11 @@ export default {
       const { data } = req.data;
       console.log(data);
     },
+    *leaveAttendances({ payload }, { call, put, select }) {
+      const req =yield call(attendances.leaveAttendances, payload);
+      const { data } = req.data;
+      console.log(data);
+    },
     *fetchAttendancesEntities({ payload }, { call, put, select }) {
       const req = yield call(attendances.fetchAttendancesEntities, (payload));
       const { data } = req.data;

@@ -26,6 +26,8 @@ class AttendancesView extends Taro.PureComponent {
       place_y: 0,
     },
     isMounted: false,
+    leaveDesc: '',
+    leaveVisible: false,
   }
 
   componentDidMount() {
@@ -46,6 +48,30 @@ class AttendancesView extends Taro.PureComponent {
       }
     })
   }
+  handleLeaveClick = () => {
+    this.setState({
+      leaveVisible: true,
+    })
+  }
+  handleLeaveSubmit = () => {
+    this.props.dispatch({
+      type: 'attendances/leaveAttendances',
+      payload: {
+        description: this.state.leaveDesc,
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
+      }
+    }).then(() => {
+      this.setState({
+        attendances: {
+          ...this.state.attendances,
+          attendance_status: 0,
+        },
+        leaveVisible: false,
+      })
+    })
+  }
   handleSignClick = () => {
     this.props.dispatch({
       type: 'attendances/signAttendances',
@@ -58,18 +84,59 @@ class AttendancesView extends Taro.PureComponent {
       }
     }).then(() => {
       this.setState({
-
+        attendances: {
+          ...this.state.attendances,
+          attendance_status: 1,
+        }
       })
+    })
+  };
+  handleInputChange = (keyName, value) => {
+    this.setState({
+      [keyName]: value.target.value,
     })
   };
   renderTimeCount = () => {
     return timeFromNow(this.state.attendances.end_time);
   };
-
+  renderStatus = () => {
+    const { status, attendance_status } = this.state.attendances;
+    if(parseInt(attendance_status, 10) === 1) {
+      return {
+        id: 1,
+        title: '已签到',
+      }
+    }
+    if(parseInt(attendance_status, 10) === 0) {
+      return {
+        id: 2,
+        title: '已请假'
+      }
+    }
+    if(parseInt(status, 10) === -1) {
+      return {
+        id: -1,
+        title: '未开始'
+      }
+    }
+    if(parseInt(status, 10) === 1) {
+      return {
+        id: 3,
+        title: '进行中',
+      }
+    }
+    if(parseInt(status, 10) === 0 && parseInt(attendance_status, 10) === -1){
+      return {
+        id: 0,
+        title: '缺勤',
+      }
+    }
+  }
   render() {
     {console.log(this.state)}
     const timeCount = this.renderTimeCount();
     console.log(timeCount)
+    const status = this.renderStatus()
     return (
       <View className='attendances-view'>
         <View className='map'>
@@ -87,11 +154,15 @@ class AttendancesView extends Taro.PureComponent {
           <View className='title'>
             {this.state.attendances.title}
           </View>
+          <View className='tag-bar'>
+            <View className={'tag ' + `tag_${status.id}`}>
+              {status.title}
+            </View>
+          </View>
           <View className='description'>
             {this.state.attendances.description}
           </View>
-          <View className='time-countdown'>
-
+          {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1  ) && <View className='time-countdown'>
             <AtCountdown
               isShowDay={timeCount.day !== 0}
               day={timeCount.day}
@@ -99,14 +170,34 @@ class AttendancesView extends Taro.PureComponent {
               minutes={timeCount.minute}
               seconds={timeCount.second}
             />
-          </View>
+          </View>}
         </View>
         <View className='action'>
-          <AtButton onClick={this.handleSignClick}>
-            签到
-          </AtButton>
+          {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1  )&& <View className='button'>
+            <AtButton type='secondary' onClick={this.handleSignClick}>
+              签到
+            </AtButton>
+          </View>}
+          {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1 && !this.state.leaveVisible )&& <View className='button'>
+            <AtButton onClick={this.handleLeaveClick}>
+              请假
+            </AtButton>
+          </View>}
         </View>
-
+        {this.state.leaveVisible && <View className='leave'>
+          <AtTextarea
+            value={this.state.leaveDesc}
+            onChange={this.handleInputChange.bind(this, 'leaveDesc')}
+            placeholder='请输入请假原因'
+            height={200}
+          />
+          <View className='button'>
+            <AtButton disabled={this.state.leaveDesc === ''} onClick={this.handleLeaveSubmit}>提交请假申请</AtButton>
+          </View>
+        </View>}
+        {this.state.attendances.attendance_status === 0 && <View>
+          请假原因:
+        </View>}
       </View>
     )
   }

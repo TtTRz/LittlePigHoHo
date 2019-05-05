@@ -18,14 +18,40 @@ class HoCard extends Taro.PureComponent{
 
   }
   renderStatus = () => {
-    const status = {
-      "-1": '未开始',
-      "0": '已结束',
-      "1": '进行中',
+    const { status, attendance_status } = this.props.extra;
+    if(parseInt(attendance_status, 10) === 1) {
+      return {
+        id: 1,
+        title: '已签到',
+      }
     }
-    return status[this.props.extra];
+    if(parseInt(attendance_status, 10) === 0) {
+      return {
+        id: 2,
+        title: '已请假'
+      }
+    }
+    if(parseInt(status, 10) === -1) {
+      return {
+        id: -1,
+        title: '未开始'
+      }
+    }
+    if(parseInt(status, 10) === 1) {
+      return {
+        id: 3,
+        title: '进行中',
+      }
+    }
+    if(parseInt(status, 10) === 0 && parseInt(attendance_status, 10) === -1){
+      return {
+        id: 0,
+        title: '缺勤',
+      }
+    }
   }
   render() {
+    const status = this.renderStatus();
     return (
       <View className='ho-card'>
         <View className='header'>
@@ -33,8 +59,8 @@ class HoCard extends Taro.PureComponent{
             {this.props.title}
           </View>
           <View className='extra'>
-            {this.props.type === 'attendances' && <View className={'tag ' + `tag_${this.props.extra}`}>
-              {this.renderStatus()}
+            {this.props.type === 'attendances' && <View className={'tag ' + `tag_${status.id}`}>
+              {status.title}
             </View>}
           </View>
         </View>
