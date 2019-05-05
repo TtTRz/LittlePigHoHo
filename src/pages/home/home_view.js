@@ -64,7 +64,7 @@ class HomeView extends Taro.PureComponent {
 
   }
 
-  componentDidMount () {
+  componentDidShow () {
     if(this.props.account.school_id === "") {
       Taro.redirectTo({
         url: '/pages/account/account_school_view',

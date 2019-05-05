@@ -36,7 +36,7 @@ export const API = {
       CURD: 'schools/:sid/associations/:aid/attendances/:vid',
       LIST: 'schools/:sid/associations/:aid/attendances/list',
       MGET: 'schools/:sid/associations/:aid/attendances/_mget',
-      LEAVE: 'schoosl/:sid/associations/:aid/attendances/:vid/leave',
+      LEAVE: 'schools/:sid/associations/:aid/attendances/:vid/leave',
       MANAGE: 'schools/:sid/associations/:aid/attendances/:vid/manage',
       SIGN: 'schools/:sid/associations/:aid/attendances/:vid/sign',
     }

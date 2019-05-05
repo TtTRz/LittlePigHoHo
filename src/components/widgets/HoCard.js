@@ -10,22 +10,24 @@ class HoCard extends Taro.PureComponent{
     extra: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
+    manage: PropTypes.bool,
   }
   static defaultProps = {
     type: 'normal',
+    manage: false,
   }
   state = {
 
   }
   renderStatus = () => {
     const { status, attendance_status } = this.props.extra;
-    if(parseInt(attendance_status, 10) === 1) {
+    if(parseInt(attendance_status, 10) === 1 && !this.props.manage) {
       return {
         id: 1,
         title: '已签到',
       }
     }
-    if(parseInt(attendance_status, 10) === 0) {
+    if(parseInt(attendance_status, 10) === 0 && !this.props.manage) {
       return {
         id: 2,
         title: '已请假'
@@ -43,7 +45,13 @@ class HoCard extends Taro.PureComponent{
         title: '进行中',
       }
     }
-    if(parseInt(status, 10) === 0 && parseInt(attendance_status, 10) === -1){
+    if(parseInt(status, 10) === 0 && this.props.manage) {
+      return {
+        id: 0,
+        title: '已结束'
+      }
+    }
+    if(parseInt(status, 10) === 0 && parseInt(attendance_status, 10) === -1 && !this.props.manage){
       return {
         id: 0,
         title: '缺勤',

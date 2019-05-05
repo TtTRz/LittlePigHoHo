@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import {View, Button, Text, Picker, Map} from "@tarojs/components";
 import { connect } from '@tarojs/redux';
-import {AtActivityIndicator, AtButton, AtCheckbox, AtProgress,AtToast,AtCountdown, AtIcon, AtTextarea, AtInput} from 'taro-ui'
+import {AtActivityIndicator, AtButton, AtCheckbox,AtMessage, AtProgress,AtToast, AtCountdown, AtIcon, AtTextarea, AtInput} from 'taro-ui'
 import './attendances_view.scss'
 import moment from 'moment'
 import {timeFromNow} from "../../utils/time_formatter";
@@ -12,6 +12,8 @@ const mapStateToProps = (state) => {
     association: state.association.myEntity,
     attendancesList: state.attendances.list,
     isLoading: state.loading.global,
+    manage: state.association.myEntity.role === 2,
+    // manage: false,
   }
 };
 
@@ -63,6 +65,10 @@ class AttendancesView extends Taro.PureComponent {
         attendancesId: this.$router.params.aid,
       }
     }).then(() => {
+      Taro.atMessage({
+        'message': '请假成功',
+        'type': 'success',
+      })
       this.setState({
         attendances: {
           ...this.state.attendances,
@@ -83,6 +89,10 @@ class AttendancesView extends Taro.PureComponent {
         attendancesId: this.$router.params.aid,
       }
     }).then(() => {
+      Taro.atMessage({
+        'message': '签到成功',
+        'type': 'success',
+      })
       this.setState({
         attendances: {
           ...this.state.attendances,
@@ -101,13 +111,13 @@ class AttendancesView extends Taro.PureComponent {
   };
   renderStatus = () => {
     const { status, attendance_status } = this.state.attendances;
-    if(parseInt(attendance_status, 10) === 1) {
+    if(parseInt(attendance_status, 10) === 1 && !this.props.manage) {
       return {
         id: 1,
         title: '已签到',
       }
     }
-    if(parseInt(attendance_status, 10) === 0) {
+    if(parseInt(attendance_status, 10) === 0 && !this.props.manage) {
       return {
         id: 2,
         title: '已请假'
@@ -125,7 +135,13 @@ class AttendancesView extends Taro.PureComponent {
         title: '进行中',
       }
     }
-    if(parseInt(status, 10) === 0 && parseInt(attendance_status, 10) === -1){
+    if(parseInt(status, 10) === 0 && this.props.manage) {
+      return {
+        id: 0,
+        title: '已结束'
+      }
+    }
+    if(parseInt(status, 10) === 0 && parseInt(attendance_status, 10) === -1 && !this.props.manage){
       return {
         id: 0,
         title: '缺勤',
@@ -172,32 +188,38 @@ class AttendancesView extends Taro.PureComponent {
             />
           </View>}
         </View>
-        <View className='action'>
-          {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1  )&& <View className='button'>
-            <AtButton type='secondary' onClick={this.handleSignClick}>
-              签到
-            </AtButton>
-          </View>}
-          {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1 && !this.state.leaveVisible )&& <View className='button'>
-            <AtButton onClick={this.handleLeaveClick}>
-              请假
-            </AtButton>
-          </View>}
-        </View>
-        {this.state.leaveVisible && <View className='leave'>
-          <AtTextarea
-            value={this.state.leaveDesc}
-            onChange={this.handleInputChange.bind(this, 'leaveDesc')}
-            placeholder='请输入请假原因'
-            height={200}
-          />
-          <View className='button'>
-            <AtButton disabled={this.state.leaveDesc === ''} onClick={this.handleLeaveSubmit}>提交请假申请</AtButton>
+        {!this.props.manage && <View>
+          <View className='action'>
+            {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1  )&& <View className='button'>
+              <AtButton type='secondary' onClick={this.handleSignClick}>
+                签到
+              </AtButton>
+            </View>}
+            {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1 && !this.state.leaveVisible )&& <View className='button'>
+              <AtButton onClick={this.handleLeaveClick}>
+                请假
+              </AtButton>
+            </View>}
           </View>
+          {this.state.leaveVisible && <View className='leave'>
+            <AtTextarea
+              value={this.state.leaveDesc}
+              onChange={this.handleInputChange.bind(this, 'leaveDesc')}
+              placeholder='请输入请假原因'
+              height={200}
+            />
+            <View className='button'>
+              <AtButton disabled={this.state.leaveDesc === ''} onClick={this.handleLeaveSubmit}>提交请假申请</AtButton>
+            </View>
+          </View>}
+          {this.state.attendances.attendance_status === 0 && <View>
+            请假原因:
+          </View>}
         </View>}
-        {this.state.attendances.attendance_status === 0 && <View>
-          请假原因:
+        {this.props.manage && <View>
+          
         </View>}
+        <AtMessage />
       </View>
     )
   }

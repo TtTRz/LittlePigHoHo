@@ -11,7 +11,7 @@
     padding: .5em;
     .title{
       font-weight: bold;
-      font-size: 1.1em;
+      font-size: 1.3em;
       color: $grey-8;
       padding: .2em .5em;
     }
@@ -65,6 +65,9 @@
     .description {
       padding: 1em .5em;
       padding-top: 0.2em;
+    }
+    .time-countdown {
+      padding: .2em .5em;
     }
   }
   .action {

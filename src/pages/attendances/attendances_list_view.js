@@ -79,9 +79,9 @@ class AttendancesListView extends Taro.PureComponent {
     const attendancesList = this.renderAttendancesList();
     return (
       <View className='attendances-list-view'>
-        <View className='attendances-button'>
+        {this.props.association.role === 2 && <View className='attendances-button'>
           <AtButton onClick={this.handleCreateClick}>新增考勤</AtButton>
-        </View>
+        </View>}
         {attendancesList.length === 0 && <View style={{ margin: '1em auto'}}>
           暂无考勤信息
         </View>}
@@ -89,7 +89,7 @@ class AttendancesListView extends Taro.PureComponent {
           {attendancesList.map((item, index) => {
            return  <View key={index} className='card' onClick={this.handleCardClick.bind(this, item)}>
              <HoCard
-
+               manage={this.props.association.role === 2}
                type='attendances'
                note={this.renderTime(item)}
                title={item.title}
