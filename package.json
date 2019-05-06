@@ -50,7 +50,8 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "taro-ui": "^2.1.0"
+    "taro-ui": "^2.1.0",
+    "wqr-amap": "^1.0.3"
   },
   "devDependencies": {
     "@types/react": "^16.4.8",

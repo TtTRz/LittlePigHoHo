@@ -1,7 +1,7 @@
 import PathToRegexp from 'path-to-regexp';
 import Request from '../utils/request'
 import { API } from '../constants/apis'
-
+import get from 'lodash.get';
 export const addAttendances = (payload) => {
   const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.ADD);
   return Request({
@@ -18,7 +18,13 @@ export const addAttendances = (payload) => {
     }
   })
 }
-
+export const getAttendancesEntity = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.CURD);
+  return Request({
+    method: 'get',
+    url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
+  })
+}
 export const getAttendancesList = (payload) => {
   const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.LIST);
   return Request({
@@ -77,5 +83,23 @@ export const getSignMembersList = (payload) => {
   return Request({
     url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
     method: 'post',
+    data: {
+      type: payload.type,
+      department: get(payload,'department', 0),
+    }
+  })
+}
+
+export const getMapDistance = (payload) => {
+  return Request({
+    url: 'https://apis.map.qq.com/ws/distance/v1/?parameters',
+    method: 'get',
+    params: {
+      mode: 'walking',
+      from: payload.placeA.place_x + "," + payload.placeA.place_y,
+      to: payload.placeB.place_x + "," + payload.placeB.place_y,
+      key: 'BAMBZ-3J3WF-COKJX-NCOJX-OMK6J-34BF4',
+    },
+    thirdAPI: true,
   })
 }

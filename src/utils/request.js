@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 
 import { baseUrl, noConsole, deBug } from '../config';
 
-export default (options = { method: 'GET', data: {}, header: null, params: {} }) => {
+export default (options = { method: 'GET', data: {}, header: null, params: {}, thirdAPI: false }) => {
   if(!noConsole) {
     console.log(
       `${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(
@@ -30,11 +30,11 @@ export default (options = { method: 'GET', data: {}, header: null, params: {} })
     debugParams = '?debug=1'
   }
   return Taro.request({
-    url: baseUrl + options.url + urlParams + (deBug ? debugParams : ''),
+    url: options.thirdAPI ? options.url + urlParams : baseUrl + options.url + urlParams + (deBug ? debugParams : ''),
     data: {
       ...options.data,
     },
-    header: {
+    header: options.thirdAPI ? {} : {
       'Content-Type': 'application/json',
       'hoho-auth-model': 'client',
       'hoho-auth-token': options.header !== undefined ? options.header : Taro.getStorageSync('token').toString()

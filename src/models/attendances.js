@@ -6,7 +6,8 @@ export default {
   namespace: 'attendances',
   state: {
     list: [],
-    signMembersList: []
+    signMembersList: [],
+    entity: {},
   },
 
   effects: {
@@ -23,6 +24,14 @@ export default {
           schoolId: payload.schoolId,
           associationId: payload.associationId,
         }
+      })
+    },
+    *getAttendancesEntity({ payload }, { call, put, select }) {
+      const req = yield call(attendances.getAttendancesEntity, (payload));
+      const { data } = req.data;
+      yield put({
+        type: 'saveAttendancesEntity',
+        payload: data,
       })
     },
     *addAttendances({ payload }, { call, put, select }) {
@@ -62,7 +71,11 @@ export default {
         payload: data,
       });
       console.log(data);
-    }
+    },
+    *getMapDistance({payload}, { call, put, select }) {
+      const req = yield call(attendances.getMapDistance, payload);
+      return req.result.elements[0];
+    },
   },
   reducers: {
     saveAttendancesList(state, { payload }) {
@@ -75,6 +88,12 @@ export default {
       return {
         ...state,
         signMembersList: payload,
+      }
+    },
+    saveAttendancesEntity(state, { payload }) {
+      return {
+        ...state,
+        entity: payload,
       }
     }
   }

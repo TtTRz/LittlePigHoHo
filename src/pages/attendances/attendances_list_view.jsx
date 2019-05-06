@@ -33,7 +33,10 @@ class AttendancesListView extends Taro.PureComponent {
   componentWillMount() {
   }
   componentDidShow() {
-    Taro.showLoading("加载中")
+    Taro.showLoading({
+      title: '加载中',
+      mask:true,
+    })
     this.props.dispatch({
       type: 'attendances/getAttendancesList',
       payload: {
@@ -89,7 +92,8 @@ class AttendancesListView extends Taro.PureComponent {
           {attendancesList.map((item, index) => {
            return  <View key={index} className='card' onClick={this.handleCardClick.bind(this, item)}>
              <HoCard
-               manage={this.props.association.role === 2}
+               manage={this.props.association.role === 2
+               }
                type='attendances'
                note={this.renderTime(item)}
                title={item.title}

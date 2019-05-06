@@ -1,8 +1,9 @@
 import Taro from '@tarojs/taro'
-import {View, Button, Text, Picker, Map} from "@tarojs/components";
+import {View, Button, Text, Picker, Map, CoverView} from "@tarojs/components";
 import { connect } from '@tarojs/redux';
 import {AtActivityIndicator, AtButton,AtModal, AtTabs, AtTabsPane, AtList,AtListItem, AtCheckbox,AtMessage, AtProgress,AtToast, AtCountdown, AtIcon, AtTextarea, AtInput} from 'taro-ui'
 import './attendances_view.scss'
+
 import moment from 'moment'
 import {timeFromNow} from "../../utils/time_formatter";
 import HoList from "../../components/widgets/HoList";
@@ -14,8 +15,9 @@ const mapStateToProps = (state) => {
     attendancesList: state.attendances.list,
     isLoading: state.loading.global,
     signMembersList: state.attendances.signMembersList,
-    manage: state.association.myEntity.role === 2,
-    // manage: false,
+    // manage: state.association.myEntity.role === 2,
+    attendance: state.attendances.entity,
+    manage: false,
   }
 };
 
@@ -42,32 +44,43 @@ class AttendancesView extends Taro.PureComponent {
   }, {
     title: '设置',
   }]
-  componentDidMount() {
-    const attendances = this.props.attendancesList.filter((item) => item.id === parseInt(this.$router.params.aid));
-    Taro.getLocation({
-      type: 'gcj02',
-      success: (res) => {
-        const { latitude } = res;
-        const { longitude } = res;
-        this.setState({
-          attendances: attendances[0],
-          personLocation: {
-            place_x: latitude,
-            place_y: longitude,
-          },
-          isMounted: true,
-        })
+  componentDidShow() {
+    // const attendances = this.props.attendancesList.filter((item) => item.id === parseInt(this.$router.params.aid));
+    this.props.dispatch({
+      type: 'attendances/getAttendancesEntity',
+      payload: {
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
       }
-    });
+    }).then(() => {
+      Taro.getLocation({
+        type: 'gcj02',
+        success: (res) => {
+          const { latitude } = res;
+          const { longitude } = res;
+          this.setState({
+            attendances: this.props.attendance,
+            personLocation: {
+              place_x: latitude,
+              place_y: longitude,
+            },
+            isMounted: true,
+          })
+        }
+      });
+    })
     this.props.dispatch({
       type: 'attendances/getSignMembersList',
       payload: {
         schoolId: this.props.account.school_id,
         associationId: this.props.association.id,
         attendancesId: this.$router.params.aid,
+        type: 0,
       }
     })
   }
+
   handleLeaveClick = () => {
     this.setState({
       leaveVisible: true,
@@ -83,9 +96,9 @@ class AttendancesView extends Taro.PureComponent {
         attendancesId: this.$router.params.aid,
       }
     }).then(() => {
-      Taro.atMessage({
-        'message': '申请成功，审批中',
-        'type': 'success',
+      Taro.showToast({
+        title: '审批中',
+        icon: 'loading'
       })
       this.setState({
         leaveVisible: false,
@@ -94,26 +107,47 @@ class AttendancesView extends Taro.PureComponent {
   }
   handleSignClick = () => {
     this.props.dispatch({
-      type: 'attendances/signAttendances',
+      type: 'attendances/getMapDistance',
       payload: {
-        place_x: this.state.personLocation.place_x,
-        place_y: this.state.personLocation.place_y,
-        schoolId: this.props.account.school_id,
-        associationId: this.props.association.id,
-        attendancesId: this.$router.params.aid,
-      }
-    }).then(() => {
-      Taro.atMessage({
-        'message': '签到成功',
-        'type': 'success',
-      })
-      this.setState({
-        attendances: {
-          ...this.state.attendances,
-          attendance_status: 1,
+        placeA: {
+          place_x: this.state.personLocation.place_x,
+          place_y: this.state.personLocation.place_y,
+        },
+        placeB: {
+          place_x: this.state.attendances.place_x,
+          place_y: this.state.attendances.place_y,
         }
-      })
+      }
+    }).then((res) => {
+      if(res.distance >= this.state.attendances.distance && this.state.attendances.distance !== 0) {
+        Taro.showToast({
+          title: '签到失败 超出有效距离',
+          icon: 'none'
+        })
+      } else {
+        this.props.dispatch({
+          type: 'attendances/signAttendances',
+          payload: {
+            place_x: this.state.personLocation.place_x,
+            place_y: this.state.personLocation.place_y,
+            schoolId: this.props.account.school_id,
+            associationId: this.props.association.id,
+            attendancesId: this.$router.params.aid,
+          }
+        }).then(() => {
+          Taro.showToast({
+            title: '签到成功'
+          })
+          this.setState({
+            attendances: {
+              ...this.state.attendances,
+              attendance_status: 1,
+            }
+          })
+        })
+      }
     })
+
   };
   handleInputChange = (keyName, value) => {
     this.setState({
@@ -173,6 +207,7 @@ class AttendancesView extends Taro.PureComponent {
   }
   renderStatus = () => {
     const { status, attendance_status } = this.state.attendances;
+    console.log(attendance_status, 123122313123)
     if(parseInt(attendance_status, 10) === 1 && !this.props.manage) {
       return {
         id: 1,
@@ -225,7 +260,7 @@ class AttendancesView extends Taro.PureComponent {
             enable-scoll={false}
             markers={[{id: 1, latitude: this.state.personLocation.place_x, longitude: this.state.personLocation.place_y}]}
             circles={[{ latitude: this.state.attendances.place_x, longitude: this.state.attendances.place_y, radius: this.state.attendances.distance, color: '#1890ff'}]}
-            scale={18}
+            scale={20}
           />}
         </View>
         <View className='info'>
@@ -291,7 +326,7 @@ class AttendancesView extends Taro.PureComponent {
               <View style='padding: 100px 50px;background-color: #FAFBFC;text-align: center;'>标签页三的内容</View>
             </AtTabsPane>
           </AtTabs>}
-        <AtMessage />
+
         <AtModal
           isOpened={this.state.modalOpened}
           title='删除考勤'
