@@ -63,3 +63,19 @@ export const leaveAttendances = (payload) => {
     }
   })
 }
+
+export const delAttendances = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.CURD);
+  return Request({
+    url: pattern({ sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId }),
+    method: 'delete',
+  })
+}
+
+export const getSignMembersList = (payload) => {
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.SIGN);
+  return Request({
+    url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
+    method: 'post',
+  })
+}

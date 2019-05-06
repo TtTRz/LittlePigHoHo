@@ -1,10 +1,11 @@
 import Taro from '@tarojs/taro'
 import {View, Button, Text, Picker, Map} from "@tarojs/components";
 import { connect } from '@tarojs/redux';
-import {AtActivityIndicator, AtButton, AtCheckbox,AtMessage, AtProgress,AtToast, AtCountdown, AtIcon, AtTextarea, AtInput} from 'taro-ui'
+import {AtActivityIndicator, AtButton,AtModal, AtTabs, AtTabsPane, AtList,AtListItem, AtCheckbox,AtMessage, AtProgress,AtToast, AtCountdown, AtIcon, AtTextarea, AtInput} from 'taro-ui'
 import './attendances_view.scss'
 import moment from 'moment'
 import {timeFromNow} from "../../utils/time_formatter";
+import HoList from "../../components/widgets/HoList";
 const mapStateToProps = (state) => {
 
   return {
@@ -12,6 +13,7 @@ const mapStateToProps = (state) => {
     association: state.association.myEntity,
     attendancesList: state.attendances.list,
     isLoading: state.loading.global,
+    signMembersList: state.attendances.signMembersList,
     manage: state.association.myEntity.role === 2,
     // manage: false,
   }
@@ -30,8 +32,16 @@ class AttendancesView extends Taro.PureComponent {
     isMounted: false,
     leaveDesc: '',
     leaveVisible: false,
+    modalOpened: false,
+    current: 0,
   }
-
+  TAB_LIST = [{
+    title: '签到表'
+  }, {
+    title: '请假管理 '
+  }, {
+    title: '设置',
+  }]
   componentDidMount() {
     const attendances = this.props.attendancesList.filter((item) => item.id === parseInt(this.$router.params.aid));
     Taro.getLocation({
@@ -47,6 +57,14 @@ class AttendancesView extends Taro.PureComponent {
           },
           isMounted: true,
         })
+      }
+    });
+    this.props.dispatch({
+      type: 'attendances/getSignMembersList',
+      payload: {
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
       }
     })
   }
@@ -66,14 +84,10 @@ class AttendancesView extends Taro.PureComponent {
       }
     }).then(() => {
       Taro.atMessage({
-        'message': '请假成功',
+        'message': '申请成功，审批中',
         'type': 'success',
       })
       this.setState({
-        attendances: {
-          ...this.state.attendances,
-          attendance_status: 0,
-        },
         leaveVisible: false,
       })
     })
@@ -109,6 +123,54 @@ class AttendancesView extends Taro.PureComponent {
   renderTimeCount = () => {
     return timeFromNow(this.state.attendances.end_time);
   };
+  handleDelClick = () => {
+    this.props.dispatch({
+      type: 'attendances/delAttendances',
+      payload: {
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
+      }
+    }).then(() => {
+      Taro.hideLoading();
+      Taro.atMessage({
+        'message': '删除',
+        'type': 'success',
+      })
+      setTimeout(() => {
+        Taro.redirectTo({
+          url: '/pages/attendances/attendances_list_view'
+        })
+      }, 1000)
+    })
+  }
+  handleTabChange = (value) => {
+    this.setState({
+      current: value,
+    })
+  }
+  showModal = () => {
+    this.setState({
+      modalOpened: true,
+    })
+  }
+  handleModalClose = () => {
+    this.setState({
+      modalOpened: false,
+    })
+  }
+  handleModalConfirm = () => {
+    this.setState({
+      modalOpened: false,
+    });
+    Taro.showLoading('删除中')
+    this.handleDelClick();
+  }
+  handleModalCancel = () => {
+    this.setState({
+      modalOpened: false,
+    })
+  }
   renderStatus = () => {
     const { status, attendance_status } = this.state.attendances;
     if(parseInt(attendance_status, 10) === 1 && !this.props.manage) {
@@ -216,10 +278,30 @@ class AttendancesView extends Taro.PureComponent {
             请假原因:
           </View>}
         </View>}
-        {this.props.manage && <View>
-          
-        </View>}
+        {this.props.manage && <AtTabs current={this.state.current} tabList={this.TAB_LIST} onClick={this.handleTabChange.bind(this)}>
+            <AtTabsPane current={this.state.current} index={0} >
+              <View className='members-list'>
+                <HoList data={this.props.signMembersList} type='attendances' isEnded={this.state.attendances.status === 0} />
+              </View>
+            </AtTabsPane>
+            <AtTabsPane current={this.state.current} index={1}>
+
+            </AtTabsPane>
+            <AtTabsPane current={this.state.current} index={2}>
+              <View style='padding: 100px 50px;background-color: #FAFBFC;text-align: center;'>标签页三的内容</View>
+            </AtTabsPane>
+          </AtTabs>}
         <AtMessage />
+        <AtModal
+          isOpened={this.state.modalOpened}
+          title='删除考勤'
+          cancelText='取消'
+          confirmText='确认'
+          onClose={this.handleModalClose}
+          onCancel={this.handleModalCancel}
+          onConfirm={this.handleModalConfirm}
+          content='您确认要删除此考勤表吗？'
+        />
       </View>
     )
   }
