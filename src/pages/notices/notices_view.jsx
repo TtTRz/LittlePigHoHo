@@ -23,26 +23,10 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 class NoticesView extends Taro.PureComponent {
   componentWillMount() {
-    Taro.showLoading('加载中')
+    Taro.showLoading()
   }
-  config ={
-    enablePullDownRefresh: true,
-  }
-  onPullDownRefresh() {
-    Taro.showNavigationBarLoading()
-    Taro.showLoading({ title: '刷新中...' })
 
-  }
   componentDidMount() {
-    Taro.getSetting({
-      success: (res) => {
-        if(!res.authSetting['scope.userLocation']) {
-          Taro.authorize({
-            scope: 'scope.userLocation',
-          })
-        }
-      }
-    })
     this.props.dispatch({
       type: 'account/getDashboard',
       payload: {},

@@ -81,7 +81,6 @@ class AttendancesEditor extends Taro.PureComponent {
     })
   }
   render() {
-    console.log(this.state)
     return (
       <View className='attendances-editor'>
         <View className='content'>
@@ -111,7 +110,6 @@ class AttendancesEditor extends Taro.PureComponent {
                   开始日期:
                 </View>
                 <View className='value'>
-                  {console.log(this.state.startDateSel)}
                   {this.state.startDateSel}
                 </View>
               </View>

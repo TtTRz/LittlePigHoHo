@@ -59,7 +59,7 @@ class MemberList extends Taro.PureComponent {
       <View>
         {data.map((item) => {
           return (
-            <HoAccordion department={item} onDelMembers={this.props.onDelMembers}/>
+            <HoAccordion department={item} onDelMembers={this.props.onDelMembers} />
           )
         })}
       </View>

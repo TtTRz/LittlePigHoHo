@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 class AssociationListView extends Taro.PureComponent {
   config = {
     navigationBarTitleText: '组织列表',
-
+    enablePullDownRefresh: true,
   };
   static propTypes = {
     associationListData: PropTypes.arrayOf(),
@@ -32,6 +32,17 @@ class AssociationListView extends Taro.PureComponent {
   state = {
 
   };
+  onPullDownRefresh() {
+    this.props.dispatch({
+      type: 'association/getAssociationList',
+      payload: {
+        schoolId: this.props.schoolId,
+      }
+    }).then(() => {
+      Taro.stopPullDownRefresh()
+    })
+  }
+
   componentDidShow() {
     this.props.dispatch({
       type: 'association/getAssociationList',

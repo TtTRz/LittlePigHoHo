@@ -45,10 +45,11 @@ class App extends Component {
 
     ],
     window: {
-      backgroundTextStyle: 'light',
       navigationBarBackgroundColor: 'white',
       navigationBarTitleText: 'LPHH',
       navigationBarTextStyle: 'black',
+      backgroundTextStyle: "dark",
+      disableScroll: false,
     },
     permission: {
       "scope.userLocation": {

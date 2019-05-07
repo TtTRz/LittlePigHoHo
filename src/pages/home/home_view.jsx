@@ -37,7 +37,7 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 class HomeView extends Taro.PureComponent {
   config = {
-    navigationBarTitleText: 'HoHo~'
+    enablePullDownRefresh: true,
   };
 
   static propTypes = {
@@ -54,6 +54,15 @@ class HomeView extends Taro.PureComponent {
   };
 
   componentWillMount() {
+    Taro.getSetting({
+      success: (res) => {
+        if(!res.authSetting['scope.userLocation']) {
+          Taro.authorize({
+            scope: 'scope.userLocation',
+          })
+        }
+      }
+    })
     if(this.$router.params.tabId) {
       this.setState({
         currentTab: parseInt(this.$router.params.tabId, 10),
@@ -63,7 +72,51 @@ class HomeView extends Taro.PureComponent {
   componentWillUnmount () {
 
   }
-
+  onPullDownRefresh() {
+    this.props.dispatch({
+      type: 'account/getDashboard',
+      payload: {},
+    }).then(() => {
+      this.props.dispatch({
+        type: 'account/accountMe',
+        payload: ({
+          token: Taro.getStorageSync('token')
+        })
+      }).then(() => {
+        this.props.dispatch({
+          type: 'association/getAssociationListMe',
+          payload: ({
+            schoolId: this.props.account.school_id,
+          })
+        })
+        if(Taro.getStorageSync('associationId') !== "") {
+          this.props.dispatch({
+            type: 'association/getAssociationEntityMe',
+            payload: ({
+              schoolId: this.props.account.school_id,
+              associationId: parseInt(Taro.getStorageSync('associationId'), 10),
+            })
+          }).then(() => {
+            this.props.dispatch({
+              type: 'department/getDepartmentList',
+              payload: {
+                schoolId: this.props.account.school_id,
+                associationId: parseInt(Taro.getStorageSync('associationId'), 10),
+              }
+            }).then(() => {
+              Taro.stopPullDownRefresh()
+            })
+          })
+        } else {
+          this.setState({
+            assoVisible: true,
+          }, () => {
+            Taro.stopPullDownRefresh()
+          })
+        }
+      })
+    })
+  }
   componentDidShow () {
     if(this.props.account.school_id === "") {
       Taro.redirectTo({

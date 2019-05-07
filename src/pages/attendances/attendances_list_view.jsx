@@ -25,18 +25,16 @@ const mapStateToProps = (state) => {
 
 @connect(mapStateToProps)
 class AttendancesListView extends Taro.PureComponent {
-
+  config = {
+    enablePullDownRefresh: true,
+  }
   state = {
-
+    isFetched: false,
   };
 
   componentWillMount() {
   }
-  componentDidShow() {
-    Taro.showLoading({
-      title: '加载中',
-      mask:true,
-    })
+  onPullDownRefresh() {
     this.props.dispatch({
       type: 'attendances/getAttendancesList',
       payload: {
@@ -44,7 +42,25 @@ class AttendancesListView extends Taro.PureComponent {
         associationId: this.props.association.id,
       }
     }).then(() => {
-      Taro.hideLoading()
+      Taro.stopPullDownRefresh()
+    })
+  }
+  componentDidShow() {
+    Taro.showLoading()
+    this.props.dispatch({
+      type: 'attendances/getAttendancesList',
+      payload: {
+        schoolId: this.props.schoolId,
+        associationId: this.props.association.id,
+      }
+    }).then(() => {
+      Taro.hideLoading({
+        success: () => {
+          this.setState({
+            isFetched: true,
+          })
+        }
+      })
     })
   }
   renderAttendancesList = () => {
@@ -82,13 +98,13 @@ class AttendancesListView extends Taro.PureComponent {
     const attendancesList = this.renderAttendancesList();
     return (
       <View className='attendances-list-view'>
-        {this.props.association.role === 2 && <View className='attendances-button'>
+        {this.props.association.role === 2 && this.state.isFetched && <View className='attendances-button'>
           <AtButton onClick={this.handleCreateClick}>新增考勤</AtButton>
         </View>}
-        {attendancesList.length === 0 && <View style={{ margin: '1em auto'}}>
+        {attendancesList.length === 0 && this.state.isFetched &&  <View style={{ margin: '1em auto'}}>
           暂无考勤信息
         </View>}
-        {attendancesList.length !==0 && <View className='attendances-list'>
+        {attendancesList.length !==0 && this.state.isFetched && <View className='attendances-list'>
           {attendancesList.map((item, index) => {
            return  <View key={index} className='card' onClick={this.handleCardClick.bind(this, item)}>
              <HoCard
