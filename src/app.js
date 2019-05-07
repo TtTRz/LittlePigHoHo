@@ -3,7 +3,6 @@ import Taro, { Component } from '@tarojs/taro'
 import { Provider } from '@tarojs/redux'
 import 'taro-ui/dist/style/index.scss'
 
-import './assets/css/font-awesome.css'
 
 
 import dva from './utils/dva'
@@ -49,7 +48,6 @@ class App extends Component {
       navigationBarTitleText: 'LPHH',
       navigationBarTextStyle: 'black',
       backgroundTextStyle: "dark",
-      disableScroll: false,
     },
     permission: {
       "scope.userLocation": {
