@@ -104,7 +104,7 @@ export const getMapDistance = (payload) => {
   })
 };
 export const editAttendances = (payload) => {
-  const pattern = API.ASSOCIATION.ATTENDANCES.CURD;
+  const pattern = PathToRegexp.compile( API.ASSOCIATION.ATTENDANCES.CURD);
   return Request({
     url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
     method: 'put',
@@ -120,7 +120,7 @@ export const editAttendances = (payload) => {
   })
 }
 export const manageAttendances = payload => {
-  const pattern = API.ASSOCIATION.ATTENDANCES.MANAGE;
+  const pattern = PathToRegexp.compile(API.ASSOCIATION.ATTENDANCES.MANAGE);
   return Request({
     url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
     method: 'post',

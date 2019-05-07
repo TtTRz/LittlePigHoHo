@@ -241,15 +241,14 @@ class CreateAttendancesView extends Taro.PureComponent {
               value={this.state.distance}
               onChange={this.handleInputChange.bind(this, 'distance')}
             />
-            {this.state.place_x !== 0 && this.state.place_y !== 0 &&<View>
+            {this.state.place_x !== 0 && this.state.place_y !== 0 &&<View className='map'>
               <Map
                 longitude={this.state.place_y}
                 latitude={this.state.place_x}
                 style={{ width: '100%' }}
-                enable-scoll={false}
                 markers={[{id: 1, latitude: this.state.place_x, longitude: this.state.place_y}]}
                 circles={[{ latitude: this.state.place_x, longitude: this.state.place_y, radius: this.state.distance, color: '#1890ff'}]}
-                scale={16}
+                scale={18}
               />
             </View>}
           </View>

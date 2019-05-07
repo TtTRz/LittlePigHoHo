@@ -7,6 +7,7 @@ import './attendances_view.scss'
 import moment from 'moment'
 import {timeFromNow} from "../../utils/time_formatter";
 import HoList from "../../components/widgets/HoList";
+import AttendancesEditor from "../../components/attendances/attendances_editor";
 const mapStateToProps = (state) => {
 
   return {
@@ -163,6 +164,20 @@ class AttendancesView extends Taro.PureComponent {
   renderTimeCount = () => {
     return timeFromNow(this.state.attendances.end_time);
   };
+  handleEditClick = (item) => {
+    console.log(item, '12313adasdasd')
+    this.props.dispatch({
+      type: 'attendances/editAttendances',
+      payload: {
+        ...item,
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
+      }
+    }).then(() => {
+
+    })
+  }
   handleDelClick = () => {
     this.props.dispatch({
       type: 'attendances/delAttendances',
@@ -173,9 +188,8 @@ class AttendancesView extends Taro.PureComponent {
       }
     }).then(() => {
       Taro.hideLoading();
-      Taro.atMessage({
-        'message': '删除',
-        'type': 'success',
+      Taro.showToast({
+        title: '删除成功'
       })
       setTimeout(() => {
         Taro.redirectTo({
@@ -329,7 +343,12 @@ class AttendancesView extends Taro.PureComponent {
 
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={2}>
-              <View style='padding: 100px 50px;background-color: #FAFBFC;text-align: center;'>标签页三的内容</View>
+              {this.state.current === 2 && <AttendancesEditor
+                attendances={this.state.attendances}
+                onDelClick={this.showModal}
+                onSubmitClick={this.handleEditClick}
+                isLoading={this.props.isLoading}
+              />}
             </AtTabsPane>
           </AtTabs>}
 

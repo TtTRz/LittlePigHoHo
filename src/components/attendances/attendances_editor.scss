@@ -1,0 +1,56 @@
+@import '../../assets/scss/color';
+
+.attendances-editor {
+  .content {
+    margin-top: .5em;
+    .title-input {
+      padding: 0.5em;
+      .text-area {
+        padding: 0 .8em;
+      }
+    }
+    .time-picker {
+      padding: 0 .5em;
+      .picker{
+        position:relative;
+        padding: 24rpx 0;
+        color:#333;
+        background-color:#FFF;
+        margin-left: 32rpx;
+        margin-bottom: 1PX;
+        display: flex;
+        border-bottom: 0.5px solid #d6e4ef;
+        .label {
+          margin-right:16rpx;
+          width:172rpx;
+          font-size:32rpx;
+          line-height:1.5;
+          vertical-align:middle;
+          text-align:left;
+        }
+        .value {
+          font-size:32rpx;
+          line-height:1.5;
+          height:auto !important;
+          min-height:auto !important;
+
+        }
+
+      }
+    }
+    .address-picker{
+      padding: 0 .6em;
+      font-size: 32rpx;
+      .map{
+        margin: 2em 0;
+        margin-bottom: .5em;
+      }
+    }
+    .submit-button {
+      padding: 1em;
+      .button {
+        margin: 1em 0;
+      }
+    }
+  }
+}
