@@ -102,4 +102,30 @@ export const getMapDistance = (payload) => {
     },
     thirdAPI: true,
   })
+};
+export const editAttendances = (payload) => {
+  const pattern = API.ASSOCIATION.ATTENDANCES.CURD;
+  return Request({
+    url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
+    method: 'put',
+    data: {
+      title: payload.title,
+      description: payload.description,
+      place_x: payload.place_x,
+      place_y: payload.place_y,
+      distance: payload.distance,
+      start_time: payload.start_time,
+      end_time: payload.end_time,
+    }
+  })
+}
+export const manageAttendances = payload => {
+  const pattern = API.ASSOCIATION.ATTENDANCES.MANAGE;
+  return Request({
+    url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
+    method: 'post',
+    data: {
+      ...payload.members
+    }
+  })
 }

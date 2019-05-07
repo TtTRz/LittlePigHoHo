@@ -70,7 +70,14 @@ export default {
         type: 'saveSignMembersList',
         payload: data,
       });
-      console.log(data);
+    },
+    *manageAttendances({payload}, { call, put, select }) {
+      const req = yield call(attendances.manageAttendances, payload);
+      const { data } = req.data;
+    },
+    *editAttendances({ payload }, { call, put, select }) {
+      const req = yield call(attendances.editAttendances, payload);
+      const { data } = req.data;
     },
     *getMapDistance({payload}, { call, put, select }) {
       const req = yield call(attendances.getMapDistance, payload);

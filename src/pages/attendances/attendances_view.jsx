@@ -15,9 +15,9 @@ const mapStateToProps = (state) => {
     attendancesList: state.attendances.list,
     isLoading: state.loading.global,
     signMembersList: state.attendances.signMembersList,
-    // manage: state.association.myEntity.role === 2,
+    manage: state.association.myEntity.role === 2,
     attendance: state.attendances.entity,
-    manage: false,
+    // manage: false,
   }
 };
 
@@ -45,7 +45,13 @@ class AttendancesView extends Taro.PureComponent {
     title: '设置',
   }]
   componentDidShow() {
-    // const attendances = this.props.attendancesList.filter((item) => item.id === parseInt(this.$router.params.aid));
+    this.props.dispatch({
+      type: 'association/getAssociationEntity',
+      payload: {
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+      }
+    });
     this.props.dispatch({
       type: 'attendances/getAttendancesEntity',
       payload: {
