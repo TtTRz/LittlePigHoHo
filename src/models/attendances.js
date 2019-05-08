@@ -83,6 +83,34 @@ export default {
       const req = yield call(attendances.getMapDistance, payload);
       return req.result.elements[0];
     },
+
+    *renderAttendancesView({ payload }, {call, put, select }) {
+      const [resultA, resultB, resultC] = yield [
+        put({
+          type: 'association/getAssociationEntity',
+          payload: {
+            schoolId: payload.schoolId,
+            associationId: payload.associationId,
+          }
+        }),
+        put({
+          type: 'attendances/getAttendancesEntity',
+          payload: {
+            schoolId: payload.schoolId,
+            associationId: payload.associationId,
+            attendancesId: payload.attendancesId,
+          }
+        }),
+        put({
+          type: 'attendances/getSignMembersList',
+          payload: {
+            schoolId: payload.schoolId,
+            associationId: payload.associationId,
+            attendancesId: payload.attendancesId,
+          }
+        }),
+      ];
+    },
   },
   reducers: {
     saveAttendancesList(state, { payload }) {

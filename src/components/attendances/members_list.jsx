@@ -1,22 +1,22 @@
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components'
-import './HoList.scss'
-import PropTypes from 'prop-types'
-import {parse} from "path-to-regexp";
+import PropTypes from 'prop-types';
 
-class HoList extends Taro.PureComponent {
+import './members_list.scss'
+
+class MembersList extends Taro.PureComponent {
   static propTypes = {
-    type: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     isEnded: PropTypes.bool,
   }
   static defaultProps = {
-    type: 'normal',
     isEnded: false,
   }
+
   state = {
 
-  }
+  };
+
   renderStatus = (item) => {
     const { status } = item;
     if(parseInt(status, 10) === 1) {
@@ -47,12 +47,15 @@ class HoList extends Taro.PureComponent {
   render() {
     console.log(this.props.data)
     return (
-      <View className='ho-list ho-list-border'>
-        {this.props.type === 'attendances' && this.props.data.map((item, index) => {
+      <View className='members-list members-list-border'>
+        <View className='members-list-title'>
+          {this.props.title === '默认' ? '其他' : this.props.title}
+        </View>
+        {this.props.data.map((item, index) => {
           const status = this.renderStatus(item);
-          return <View className='ho-list-item' key={index}>
+          return <View className='members-list-item' key={index}>
             <View className='title'>
-              {item.name}
+              {item.nickname}
             </View>
             <View className='extra'>
               <View className={'tag ' + `tag_${status.id}`}>
@@ -60,10 +63,10 @@ class HoList extends Taro.PureComponent {
               </View>
             </View>
           </View>
-        })}
+          })}
       </View>
     )
   }
 }
 
-export default HoList;
+export default MembersList;

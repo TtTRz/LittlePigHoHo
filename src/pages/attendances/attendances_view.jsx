@@ -6,8 +6,8 @@ import './attendances_view.scss'
 
 import moment from 'moment'
 import {timeFromNow} from "../../utils/time_formatter";
-import HoList from "../../components/widgets/HoList";
 import AttendancesEditor from "../../components/attendances/attendances_editor";
+import MembersList from "../../components/attendances/members_list";
 const mapStateToProps = (state) => {
 
   return {
@@ -19,6 +19,7 @@ const mapStateToProps = (state) => {
     manage: state.association.myEntity.role === 2,
     attendance: state.attendances.entity,
     // manage: false,
+    loading: state.loading,
   }
 };
 
@@ -94,48 +95,77 @@ class AttendancesView extends Taro.PureComponent {
   }
 
   componentDidShow() {
+    Taro.showLoading();
     this.props.dispatch({
-      type: 'association/getAssociationEntity',
+      type: 'attendances/renderAttendancesView',
       payload: {
         schoolId: this.props.account.school_id,
         associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
       }
     }).then(() => {
-      this.props.dispatch({
-        type: 'attendances/getAttendancesEntity',
-        payload: {
-          schoolId: this.props.account.school_id,
-          associationId: this.props.association.id,
-          attendancesId: this.$router.params.aid,
+      Taro.getLocation({
+        type: 'gcj02',
+        success: (re) => {
+          const { latitude } = re;
+          const { longitude } = re;
+          this.setState({
+            attendances: this.props.attendance,
+            personLocation: {
+              place_x: latitude,
+              place_y: longitude,
+            },
+            isMounted: true,
+          },() => {
+            Taro.hideLoading()
+          })
         }
-      }).then(() => {
-        Taro.getLocation({
-          type: 'gcj02',
-          success: (res) => {
-            const { latitude } = res;
-            const { longitude } = res;
-            this.props.dispatch({
-              type: 'attendances/getSignMembersList',
-              payload: {
-                schoolId: this.props.account.school_id,
-                associationId: this.props.association.id,
-                attendancesId: this.$router.params.aid,
-                type: 0,
-              }
-            }).then(() => {
-              this.setState({
-                attendances: this.props.attendance,
-                personLocation: {
-                  place_x: latitude,
-                  place_y: longitude,
-                },
-                isMounted: true,
-              })
-            })
-          }
-        });
       })
     })
+    // this.props.dispatch({
+    //   type: 'association/getAssociationEntity',
+    //   payload: {
+    //     schoolId: this.props.account.school_id,
+    //     associationId: this.props.association.id,
+    //   }
+    // }).then(() => {
+    //   this.props.dispatch({
+    //     type: 'attendances/getAttendancesEntity',
+    //     payload: {
+    //       schoolId: this.props.account.school_id,
+    //       associationId: this.props.association.id,
+    //       attendancesId: this.$router.params.aid,
+    //     }
+    //   }).then(() => {
+    //     Taro.getLocation({
+    //       type: 'gcj02',
+    //       success: (res) => {
+    //         const { latitude } = res;
+    //         const { longitude } = res;
+    //         this.props.dispatch({
+    //           type: 'attendances/getSignMembersList',
+    //           payload: {
+    //             schoolId: this.props.account.school_id,
+    //             associationId: this.props.association.id,
+    //             attendancesId: this.$router.params.aid,
+    //             type: 0,
+    //           }
+    //         }).then(() => {
+    //           this.setState({
+    //             attendances: this.props.attendance,
+    //             personLocation: {
+    //               place_x: latitude,
+    //               place_y: longitude,
+    //             },
+    //             isMounted: true,
+    //           },() => {
+    //             Taro.hideLoading()
+    //           })
+    //         })
+    //       }
+    //     });
+    //   })
+    // })
   }
 
   handleLeaveClick = () => {
@@ -187,7 +217,12 @@ class AttendancesView extends Taro.PureComponent {
               }
             }
           }).then((re) => {
-            if(re.distance >= this.state.attendances.distance && this.state.attendances.distance !== 0) {
+            let b = Math.PI / 180;
+            let c = Math.sin((this.state.attendances.place_x - this.state.personLocation.place_x) * b / 2);
+            let d = Math.sin((this.state.attendances.place_y - this.state.personLocation.place_y) * b / 2);
+            let a = c * c + d * d * Math.cos(this.state.attendances.place_x * b) * Math.cos(this.state.personLocation.place_x * b);
+            const distance = 12756274 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            if(distance >= this.state.attendances.distance && this.state.attendances.distance !== 0) {
               Taro.showToast({
                 title: '签到失败 超出有效距离',
                 icon: 'none'
@@ -252,6 +287,9 @@ class AttendancesView extends Taro.PureComponent {
           attendancesId: this.$router.params.aid,
         }
       }).then(() => {
+        Taro.showToast({
+          title: '修改成功',
+        })
         this.setState({
           attendances: this.props.attendance
         })
@@ -351,22 +389,24 @@ class AttendancesView extends Taro.PureComponent {
       <View className='attendances-view'>
         {this.state.isMounted && <View className='map'>
           {this.state.isMounted && <Map
-            style={{ width: '100%', height: '12em'}}
+            style={{ width: '100%', height: '15em'}}
             longitude={this.state.attendances.place_y}
             latitude={this.state.attendances.place_x}
             enable-scoll={false}
-            markers={[{id: 1, latitude: this.state.personLocation.place_x, longitude: this.state.personLocation.place_y}]}
-            circles={[{ latitude: this.state.attendances.place_x, longitude: this.state.attendances.place_y, radius: this.state.attendances.distance, color: '#1890ff'}]}
-            scale={20}
+            markers={[{id: 1, latitude: this.state.personLocation.place_x, longitude: this.state.personLocation.place_y }]}
+            circles={[{ latitude: this.state.attendances.place_x, longitude: this.state.attendances.place_y, radius: this.state.attendances.distance, color: '#1890ff', fillColor: '#7cb5ec88'}]}
+            scale={19}
           />}
         </View>}
         {this.state.isMounted && <View className='info'>
-          <View className='title'>
-            {this.state.attendances.title}
-          </View>
-          <View className='tag-bar'>
-            <View className={'tag ' + `tag_${status.id}`}>
-              {status.title}
+          <View className='title-bar'>
+            <View className='title'>
+              {this.state.attendances.title}
+            </View>
+            <View className='tag-bar'>
+              <View className={'tag ' + `tag_${status.id}`}>
+                {status.title}
+              </View>
             </View>
           </View>
           <View className='description'>
@@ -413,7 +453,9 @@ class AttendancesView extends Taro.PureComponent {
         {this.props.manage && this.state.isMounted && <AtTabs current={this.state.current} tabList={this.TAB_LIST} onClick={this.handleTabChange.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} >
               <View className='members-list'>
-                <HoList data={this.props.signMembersList} type='attendances' isEnded={this.state.attendances.status === 0} />
+                {this.props.signMembersList.map((item, index) => {
+                  return <MembersList data={item.data} title={item.name} key={index} isEnded={this.state.attendances.status === 0} />
+                })}
               </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>

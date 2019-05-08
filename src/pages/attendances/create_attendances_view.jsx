@@ -247,7 +247,7 @@ class CreateAttendancesView extends Taro.PureComponent {
                 latitude={this.state.place_x}
                 style={{ width: '100%' }}
                 markers={[{id: 1, latitude: this.state.place_x, longitude: this.state.place_y}]}
-                circles={[{ latitude: this.state.place_x, longitude: this.state.place_y, radius: this.state.distance, color: '#1890ff'}]}
+                circles={[{ latitude: this.state.place_x, longitude: this.state.place_y, radius: this.state.distance, color: '#1890ff', fillColor: '#7cb5ec88'}]}
                 scale={18}
               />
             </View>}

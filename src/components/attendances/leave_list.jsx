@@ -16,7 +16,7 @@ class LeaveList extends Taro.PureComponent {
 
   render() {
     return (
-      <View>
+      <View className='leave-list'>
 
       </View>
     )

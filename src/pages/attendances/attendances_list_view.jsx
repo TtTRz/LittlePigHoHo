@@ -46,7 +46,7 @@ class AttendancesListView extends Taro.PureComponent {
     })
   }
   componentDidShow() {
-    Taro.showLoading()
+    Taro.showLoading();
     this.props.dispatch({
       type: 'attendances/getAttendancesList',
       payload: {
@@ -54,12 +54,10 @@ class AttendancesListView extends Taro.PureComponent {
         associationId: this.props.association.id,
       }
     }).then(() => {
-      Taro.hideLoading({
-        success: () => {
-          this.setState({
-            isFetched: true,
-          })
-        }
+      this.setState({
+        isFetched: true,
+      }, () => {
+        Taro.hideLoading()
       })
     })
   }
