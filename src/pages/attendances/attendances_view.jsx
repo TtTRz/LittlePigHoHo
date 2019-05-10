@@ -3,11 +3,14 @@ import {View, Button, Text, Picker, Map, CoverView} from "@tarojs/components";
 import { connect } from '@tarojs/redux';
 import {AtActivityIndicator, AtButton,AtModal, AtTabs, AtTabsPane, AtList,AtListItem, AtCheckbox,AtMessage, AtProgress,AtToast, AtCountdown, AtIcon, AtTextarea, AtInput} from 'taro-ui'
 import './attendances_view.scss'
-
+import get from 'lodash.get';
 import moment from 'moment'
 import {timeFromNow} from "../../utils/time_formatter";
 import AttendancesEditor from "../../components/attendances/attendances_editor";
 import MembersList from "../../components/attendances/members_list";
+import {objectMap} from "../../utils/objectUtils";
+import LeaveList from "../../components/attendances/leave_list";
+
 const mapStateToProps = (state) => {
 
   return {
@@ -18,8 +21,8 @@ const mapStateToProps = (state) => {
     signMembersList: state.attendances.signMembersList,
     manage: state.association.myEntity.role === 2,
     attendance: state.attendances.entity,
+    personLocations: state.attendances.personLocation,
     // manage: false,
-    loading: state.loading,
   }
 };
 
@@ -30,13 +33,10 @@ class AttendancesView extends Taro.PureComponent {
   }
   state = {
     isOpened: false,
-    attendances: {},
-    personLocation: {
-      place_x: 0,
-      place_y: 0,
-    },
-    isMounted: false,
+    attendances: this.props.attendance,
+    personLocation: this.props.personLocations,
     leaveDesc: '',
+    isMounted: false,
     leaveVisible: false,
     modalOpened: false,
     current: 0,
@@ -50,48 +50,64 @@ class AttendancesView extends Taro.PureComponent {
   }]
   onPullDownRefresh() {
     this.props.dispatch({
-      type: 'association/getAssociationEntity',
+      type: 'attendances/renderAttendancesView',
       payload: {
         schoolId: this.props.account.school_id,
         associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
       }
     }).then(() => {
-      this.props.dispatch({
-        type: 'attendances/getAttendancesEntity',
-        payload: {
-          schoolId: this.props.account.school_id,
-          associationId: this.props.association.id,
-          attendancesId: this.$router.params.aid,
-        }
-      }).then(() => {
-        Taro.getLocation({
-          type: 'gcj02',
-          success: (res) => {
-            const { latitude } = res;
-            const { longitude } = res;
-            this.setState({
-              attendances: this.props.attendance,
-              personLocation: {
-                place_x: latitude,
-                place_y: longitude,
-              },
-              isMounted: true,
-            })
-          }
-        });
-        this.props.dispatch({
-          type: 'attendances/getSignMembersList',
-          payload: {
-            schoolId: this.props.account.school_id,
-            associationId: this.props.association.id,
-            attendancesId: this.$router.params.aid,
-            type: 0,
-          }
-        }).then(() => {
-          Taro.stopPullDownRefresh()
-        })
+      this.setState({
+        isMounted: true,
+        attendances: this.props.attendance,
+        personLocation: this.props.personLocations,
+      }, () => {
+        Taro.stopPullDownRefresh()
       })
-    })
+    });
+    // this.props.dispatch({
+    //   type: 'association/getAssociationEntity',
+    //   payload: {
+    //     schoolId: this.props.account.school_id,
+    //     associationId: this.props.association.id,
+    //   }
+    // }).then(() => {
+    //   this.props.dispatch({
+    //     type: 'attendances/getAttendancesEntity',
+    //     payload: {
+    //       schoolId: this.props.account.school_id,
+    //       associationId: this.props.association.id,
+    //       attendancesId: this.$router.params.aid,
+    //     }
+    //   }).then(() => {
+    //     Taro.getLocation({
+    //       type: 'gcj02',
+    //       success: (res) => {
+    //         const { latitude } = res;
+    //         const { longitude } = res;
+    //         this.setState({
+    //           attendances: this.props.attendance,
+    //           personLocation: {
+    //             place_x: latitude,
+    //             place_y: longitude,
+    //           },
+    //           isMounted: true,
+    //         })
+    //       }
+    //     });
+    //     this.props.dispatch({
+    //       type: 'attendances/getSignMembersList',
+    //       payload: {
+    //         schoolId: this.props.account.school_id,
+    //         associationId: this.props.association.id,
+    //         attendancesId: this.$router.params.aid,
+    //         type: 0,
+    //       }
+    //     }).then(() => {
+    //
+    //     })
+    //   })
+    // })
   }
 
   componentDidShow() {
@@ -104,24 +120,16 @@ class AttendancesView extends Taro.PureComponent {
         attendancesId: this.$router.params.aid,
       }
     }).then(() => {
-      Taro.getLocation({
-        type: 'gcj02',
-        success: (re) => {
-          const { latitude } = re;
-          const { longitude } = re;
-          this.setState({
-            attendances: this.props.attendance,
-            personLocation: {
-              place_x: latitude,
-              place_y: longitude,
-            },
-            isMounted: true,
-          },() => {
-            Taro.hideLoading()
-          })
-        }
+      console.log('success')
+      this.setState({
+        isMounted: true,
+        attendances: this.props.attendance,
+        personLocation: this.props.personLocations,
+      }, () => {
+        Taro.hideLoading();
       })
-    })
+    });
+
     // this.props.dispatch({
     //   type: 'association/getAssociationEntity',
     //   payload: {
@@ -129,6 +137,7 @@ class AttendancesView extends Taro.PureComponent {
     //     associationId: this.props.association.id,
     //   }
     // }).then(() => {
+    //   console.log('success')
     //   this.props.dispatch({
     //     type: 'attendances/getAttendancesEntity',
     //     payload: {
@@ -316,6 +325,19 @@ class AttendancesView extends Taro.PureComponent {
       }, 1000)
     })
   }
+  handleLeaveSubmitClick = (item) => {
+    console.log(item)
+    this.props.dispatch({
+      type: 'attendances/manageAttendances',
+      payload: {
+        members: item,
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+        attendancesId: this.$router.params.aid,
+      }
+    })
+  };
+
   handleTabChange = (value) => {
     this.setState({
       current: value,
@@ -382,9 +404,18 @@ class AttendancesView extends Taro.PureComponent {
       }
     }
   }
+  renderLeaveList = () => {
+    const { backlog } = this.props.association;
+    if(get(backlog.attendance, `${this.props.attendance.id}`, null)){
+      return objectMap(backlog.attendance[this.props.attendance.id].data, 'id', 'info');
+    }
+    return null;
+  };
   render() {
     const timeCount = this.renderTimeCount();
-    const status = this.renderStatus()
+    const status = this.renderStatus();
+    const leaveList = this.renderLeaveList();
+    {console.log(this.state)}
     return (
       <View className='attendances-view'>
         {this.state.isMounted && <View className='map'>
@@ -398,7 +429,7 @@ class AttendancesView extends Taro.PureComponent {
             scale={19}
           />}
         </View>}
-        {this.state.isMounted && <View className='info'>
+        {this.state.isMounted &&  <View className='info'>
           <View className='title-bar'>
             <View className='title'>
               {this.state.attendances.title}
@@ -422,7 +453,7 @@ class AttendancesView extends Taro.PureComponent {
             />
           </View>}
         </View>}
-        {!this.props.manage && this.state.isMounted && <View>
+        {!this.props.manage && this.state.isMounted &&  <View>
           <View className='action'>
             {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1  )&& <View className='button'>
               <AtButton type='secondary' onClick={this.handleSignClick}>
@@ -450,7 +481,7 @@ class AttendancesView extends Taro.PureComponent {
             请假原因:
           </View>}
         </View>}
-        {this.props.manage && this.state.isMounted && <AtTabs current={this.state.current} tabList={this.TAB_LIST} onClick={this.handleTabChange.bind(this)}>
+        {this.props.manage && this.state.isMounted &&  <AtTabs current={this.state.current} tabList={this.TAB_LIST} onClick={this.handleTabChange.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} >
               <View className='members-list'>
                 {this.props.signMembersList.map((item, index) => {
@@ -459,7 +490,13 @@ class AttendancesView extends Taro.PureComponent {
               </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
-
+              <View className='members-list'>
+                <LeaveList
+                  data={leaveList}
+                  onSubmitClick={this.handleLeaveSubmitClick}
+                  onRejectClick={this.handleLeaveSubmitClick}
+                />
+              </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={2}>
               {this.state.current === 2 && <AttendancesEditor

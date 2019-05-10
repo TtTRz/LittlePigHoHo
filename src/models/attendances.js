@@ -8,6 +8,7 @@ export default {
     list: [],
     signMembersList: [],
     entity: {},
+    personLocation: {},
   },
 
   effects: {
@@ -83,37 +84,58 @@ export default {
       const req = yield call(attendances.getMapDistance, payload);
       return req.result.elements[0];
     },
+    *getPersonLocation({ payload }, {call, put}) {
+      let result;
+      yield Taro.getLocation({
+        type: 'gcj02',
+        success: (re) => {
+          result = re;
+        }
+      })
+      yield put({
+        type: 'savePersonLocation',
+        payload: {
+          place_x: result.latitude,
+          place_y: result.longitude,
+        }
+      })
 
-    *renderAttendancesView({ payload }, {call, put, select }) {
-      const [resultA, resultB, resultC] = yield [
-        put({
+    },
+    *renderAttendancesView({ payload }, { all, put }) {
+      yield all([
+        yield put({
           type: 'association/getAssociationEntity',
           payload: {
             schoolId: payload.schoolId,
             associationId: payload.associationId,
           }
         }),
-        put({
-          type: 'attendances/getAttendancesEntity',
+        yield put({
+          type: 'getAttendancesEntity',
           payload: {
             schoolId: payload.schoolId,
             associationId: payload.associationId,
             attendancesId: payload.attendancesId,
           }
         }),
-        put({
-          type: 'attendances/getSignMembersList',
+        yield put({
+          type: 'getSignMembersList',
           payload: {
             schoolId: payload.schoolId,
             associationId: payload.associationId,
             attendancesId: payload.attendancesId,
           }
         }),
-      ];
+        yield put({
+          type: 'getPersonLocation',
+        })
+      ]);
+
     },
   },
   reducers: {
     saveAttendancesList(state, { payload }) {
+      console.log('save', payload)
       return {
         ...state,
         list: payload,
@@ -129,6 +151,12 @@ export default {
       return {
         ...state,
         entity: payload,
+      }
+    },
+    savePersonLocation(state, { payload }) {
+      return {
+        ...state,
+        personLocation: payload,
       }
     }
   }

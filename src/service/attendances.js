@@ -125,7 +125,7 @@ export const manageAttendances = payload => {
     url: pattern({sid: payload.schoolId, aid: payload.associationId, vid: payload.attendancesId}),
     method: 'post',
     data: {
-      ...payload.members
+      data: payload.members,
     }
   })
 }

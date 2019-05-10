@@ -1,8 +1,8 @@
 Arguments: 
-  /Users/romchung/.nvm/versions/node/v11.6.0/bin/node /Users/romchung/.nvm/versions/node/v11.6.0/bin/yarn add src/pages/notices/create_notice_view --silent --no-progress
+  /Users/romchung/.nvm/versions/node/v11.6.0/bin/node /Users/romchung/.nvm/versions/node/v11.6.0/bin/yarn add src/components/attendances/leave_list --silent --no-progress
 
 PATH: 
-  /Users/romchung/Desktop/LittlePigHoHo/node_modules/npm/bin/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/bin:/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin
+  /Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin
 
 Yarn version: 
   1.15.2
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://r.cnpmjs.org/src%2fpages/notices/create_notice_view: [not_found] document not found
+  Error: https://r.cnpmjs.org/src%2fcomponents/attendances/leave_list: [not_found] document not found
       at Request.params.callback [as _callback] (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:66058:18)
       at Request.self.callback (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:129541:22)
       at Request.emit (events.js:188:13)
@@ -79,7 +79,8 @@ npm manifest:
       "redux": "^4.0.1",
       "redux-logger": "^3.0.6",
       "redux-thunk": "^2.3.0",
-      "taro-ui": "^2.1.0"
+      "taro-ui": "^2.1.0",
+      "wqr-amap": "^1.0.3"
     },
     "devDependencies": {
       "@types/react": "^16.4.8",
