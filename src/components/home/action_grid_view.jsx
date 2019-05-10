@@ -33,28 +33,6 @@ class ActionGridView extends Taro.PureComponent{
 
   };
 
-  association_list = [{
-    key: 'association-list',
-    iconClassname: '.all-asso-list',
-    title: '全部组织',
-    url: '/pages/association/association_list_view'
-  }, {
-    key: 'my-department',
-    iconClassname: '.department',
-    title: '部门',
-    url: '/pages/association/department/department_view?departmentId=',
-  }, {
-    key: 'add_association',
-    iconClassname: '.create-asso',
-    title: '创建组织',
-    url: '/pages/association/association_create_view'
-  }, this.props.role === 2 ? {
-    key: 'association-manage',
-    iconClassname: '.manage',
-    title: '管理',
-    url: '/pages/association/association_view?id=',
-  } : null];
-
   handleItemClick = (item) => {
     if(item.key==='association-manage') {
       const url = item.url + this.props.association.id;
@@ -76,7 +54,7 @@ class ActionGridView extends Taro.PureComponent{
     let association_list = [{
       key: 'association-list',
       iconClassname: '.all-asso-list',
-      title: '全部组织',
+      title: '全部',
       url: '/pages/association/association_list_view'
     }, {
       key: 'my-department',
@@ -92,33 +70,36 @@ class ActionGridView extends Taro.PureComponent{
       association_list.push({
         key: 'association-manage',
         iconClassname: '.manage',
-        title: '管理',
+        title: '协会管理',
         url: '/pages/association/association_view?id=',
       })
     }
     return association_list;
   }
   renderActionList = () => {
-    let action_list_manage = [{
-      key: 'notices',
-      iconClassname: '.notices',
-      title: '发布通知',
-    }, {
-      key: 'assignment',
-      iconClassname: '.mission',
-      title: '发布任务',
-    }]
     let action_list = [{
       key: 'check',
       iconClassname: '.check',
       title: '考勤',
       url: '/pages/attendances/attendances_list_view'
+    },{
+      key: 'notices',
+      iconClassname: '.notices',
+      title: '通知',
+    }, {
+      key: 'assignment',
+      iconClassname: '.mission',
+      title: '任务',
+    },{
+      key: 'assignment',
+      iconClassname: '.mission',
+      title: '排班表',
+    },{
+      key: 'assignment',
+      iconClassname: '.mission',
+      title: '绩效考核',
     }];
-    if(this.props.role !== 0) {
-      action_list_manage.forEach((item) => {
-        action_list.push(item)
-      })
-    }
+
     return action_list;
   }
   render() {

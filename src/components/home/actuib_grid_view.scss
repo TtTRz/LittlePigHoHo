@@ -1,10 +1,11 @@
 @import "~taro-ui/dist/style/components/flex.scss";
-
+@import '../../assets/scss/color';
 .action-grid-view {
   .grid-title {
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1em;
     padding-top: .5em;
+    color: $grey-9;
   }
   .grid-item {
     display: flex;
@@ -12,7 +13,8 @@
     align-items: center;
     padding: .5em;
     .item-title {
-      font-size: 0.9em;
+      font-size: 0.8em;
+      margin-top: .3em;
       color: #595959;
     }
   }

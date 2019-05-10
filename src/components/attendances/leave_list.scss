@@ -1,13 +1,13 @@
 .leave-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  width: 100%;
   .button-bar {
     .button {
-
+      padding: .5rem;
     }
   }
   .checkbox-list {
-    
+    padding: .5em;
   }
 }

@@ -80,7 +80,7 @@ class LeaveList extends Taro.PureComponent {
             selectedList={this.state.checkedList}
             onChange={this.handleCheckChange}
           />
-        </View> : <View style={{ padding: '1em' }} >暂无请假申请</View>}
+        </View> : <View style={{ margin: '1em auto' }} >暂无请假申请</View>}
       </View>
     )
   }

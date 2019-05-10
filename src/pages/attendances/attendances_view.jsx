@@ -326,7 +326,7 @@ class AttendancesView extends Taro.PureComponent {
     })
   }
   handleLeaveSubmitClick = (item) => {
-    console.log(item)
+    Taro.showLoading();
     this.props.dispatch({
       type: 'attendances/manageAttendances',
       payload: {
@@ -335,6 +335,24 @@ class AttendancesView extends Taro.PureComponent {
         associationId: this.props.association.id,
         attendancesId: this.$router.params.aid,
       }
+    }).then(() => {
+      this.props.dispatch({
+        type: 'attendances/renderAttendancesView',
+        payload: {
+          schoolId: this.props.account.school_id,
+          associationId: this.props.association.id,
+          attendancesId: this.$router.params.aid,
+        }
+      }).then(() => {
+        this.setState({
+          isMounted: true,
+          attendances: this.props.attendance,
+          personLocation: this.props.personLocations,
+        }, () => {
+          Taro.hideLoading();
+          Taro.showToast();
+        })
+      });
     })
   };
 
@@ -490,7 +508,7 @@ class AttendancesView extends Taro.PureComponent {
               </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
-              <View className='members-list'>
+              <View className='leave-list'>
                 <LeaveList
                   data={leaveList}
                   onSubmitClick={this.handleLeaveSubmitClick}
