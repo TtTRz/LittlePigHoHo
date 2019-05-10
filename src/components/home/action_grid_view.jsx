@@ -63,14 +63,19 @@ class ActionGridView extends Taro.PureComponent{
     }, {
       key: 'add_association',
       iconClassname: '.create-asso',
-      title: '创建组织',
+      title: '创建',
       url: '/pages/association/association_create_view'
+    }, {
+      key: 'zhaoxin',
+      iconClassname: '.zhaoxin',
+      title: '招新',
+      url: '/pages',
     }];
     if(this.props.role === 2) {
       association_list.push({
         key: 'association-manage',
         iconClassname: '.manage',
-        title: '协会管理',
+        title: '管理',
         url: '/pages/association/association_view?id=',
       })
     }
@@ -91,12 +96,12 @@ class ActionGridView extends Taro.PureComponent{
       iconClassname: '.mission',
       title: '任务',
     },{
-      key: 'assignment',
-      iconClassname: '.mission',
-      title: '排班表',
+      key: 'paiban',
+      iconClassname: '.paiban',
+      title: '排班',
     },{
-      key: 'assignment',
-      iconClassname: '.mission',
+      key: 'appraisings',
+      iconClassname: '.appraisings',
       title: '绩效考核',
     }];
 
@@ -109,7 +114,7 @@ class ActionGridView extends Taro.PureComponent{
      <View>
        {this.props.type === 'association' &&  <View className='action-grid-view'>
          <View className='grid-title'>
-           组织
+           社团
          </View>
          <View className='at-row at-row--wrap'>
            {association_list.map((item) => {
