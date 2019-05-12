@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/romchung/.nvm/versions/node/v11.6.0/bin/node /Users/romchung/.nvm/versions/node/v11.6.0/bin/yarn add src/components/attendances/leave_list --silent --no-progress
+  /Users/romchung/.nvm/versions/node/v11.6.0/bin/node /Users/romchung/.nvm/versions/node/v11.6.0/bin/yarn add src/pages/attendances/attendances_list_view --silent --no-progress
 
 PATH: 
   /Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin:/Users/romchung/.nvm/versions/node/v11.6.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS:/Users/romchung/Desktop/LittlePigHoHo/node_modules/.bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://r.cnpmjs.org/src%2fcomponents/attendances/leave_list: [not_found] document not found
+  Error: https://r.cnpmjs.org/src%2fpages/attendances/attendances_list_view: [not_found] document not found
       at Request.params.callback [as _callback] (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:66058:18)
       at Request.self.callback (/Users/romchung/.nvm/versions/node/v11.6.0/lib/node_modules/yarn/lib/cli.js:129541:22)
       at Request.emit (events.js:188:13)
@@ -83,24 +83,25 @@ npm manifest:
       "wqr-amap": "^1.0.3"
     },
     "devDependencies": {
-      "@types/react": "^16.4.8",
-      "@types/webpack-env": "^1.13.6",
       "@tarojs/plugin-babel": "1.2.22",
       "@tarojs/plugin-csso": "1.2.22",
       "@tarojs/plugin-sass": "1.2.22",
       "@tarojs/plugin-uglifyjs": "1.2.22",
       "@tarojs/webpack-runner": "1.2.22",
+      "@types/react": "^16.4.8",
+      "@types/webpack-env": "^1.13.6",
+      "babel-eslint": "^8.2.3",
       "babel-plugin-transform-class-properties": "^6.24.1",
       "babel-plugin-transform-decorators-legacy": "^1.3.4",
       "babel-plugin-transform-jsx-stylesheet": "^0.6.5",
       "babel-plugin-transform-object-rest-spread": "^6.26.0",
       "babel-preset-env": "^1.6.1",
-      "babel-eslint": "^8.2.3",
       "eslint": "^4.19.1",
       "eslint-config-taro": "1.2.22",
-      "eslint-plugin-react": "^7.8.2",
       "eslint-plugin-import": "^2.12.0",
-      "eslint-plugin-taro": "1.2.22"
+      "eslint-plugin-react": "^7.8.2",
+      "eslint-plugin-taro": "1.2.22",
+      "lodash.set": "^4.3.2"
     }
   }
 

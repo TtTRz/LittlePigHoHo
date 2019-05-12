@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import {AtButton, AtMessage, AtDrawer, AtCard, AtModal, AtInput,AtTextarea,  AtModalHeader, AtModalContent, AtModalAction,AtFloatLayout} from 'taro-ui'
 import { connect } from '@tarojs/redux';
-import './notices_view.scss'
+import './message_view.scss'
 import moment from "moment";
 import get from 'lodash.get'
 const mapStateToProps = (state) => {
@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
 
 
 @connect(mapStateToProps)
-class NoticesView extends Taro.PureComponent {
+class MessageView extends Taro.PureComponent {
   componentWillMount() {
     Taro.showLoading()
   }
@@ -46,8 +46,7 @@ class NoticesView extends Taro.PureComponent {
   }
   renderNote= (item) => {
     const date = moment.unix(get(item,'start_time', '')).format('YYYY-MM-DD')
-    const author = get(item,'author.nickname', '未知');
-    return author + " " + date;
+    return date;
   }
   handleCloseModal = () => {
     this.setState({
@@ -107,9 +106,6 @@ class NoticesView extends Taro.PureComponent {
                 {this.state.notice.content}
               </View>
               <View className='extra'>
-                <View className='author'>
-                  {this.state.notice.author.nickname}
-                </View>
                 <View className='date'>
                   {moment.unix(get(this.state.notice,'start_time', '')).format('YYYY-MM-DD')}
                 </View>
@@ -122,4 +118,4 @@ class NoticesView extends Taro.PureComponent {
   }
 }
 
-export default NoticesView;
+export default MessageView;

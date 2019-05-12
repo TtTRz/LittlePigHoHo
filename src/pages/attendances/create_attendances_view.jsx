@@ -128,6 +128,7 @@ class CreateAttendancesView extends Taro.PureComponent {
         associationId: this.props.association.id,
       }
     }).then(() => {
+      Taro.showToast('发布成功')
       this.setState({
         status: 'success'
       }, () => {

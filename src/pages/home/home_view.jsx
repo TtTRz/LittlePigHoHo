@@ -20,7 +20,7 @@ import UserInfoView from '../../components/home/userinfo_view';
 import ActionGridView from '../../components/home/action_grid_view'
 import './home_view.scss'
 import Img1 from '../../static/img/lphh.jpeg'
-import NoticesView from '../notices/notices_view'
+import MessageView from '../notices/message_view'
 import HoTabBar from "../../components/widgets/HoTabBar";
 
 const mapStateToProps = (state) => {
@@ -206,7 +206,7 @@ class HomeView extends Taro.PureComponent {
     return (
       <View className='page-layout'>
         {this.state.currentTab === 0 &&  <View className='message-view'>
-          <NoticesView />
+          <MessageView />
         </View>}
         {this.state.currentTab === 1 && <View className='home-view'>
           <View className='home-view-header'>

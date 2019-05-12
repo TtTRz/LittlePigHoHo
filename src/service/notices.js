@@ -42,3 +42,23 @@ export const addNotices = (payload) => {
     })
   )
 }
+
+export const getNotice = (payload) => {
+  const pattern = PathToRegexp.compile(API.NOTICES.CURD);
+  return (
+    Request({
+      url: pattern({ sid: payload.schoolId, aid: payload.associationId, nid: payload.noticeId }),
+      method: 'get',
+    })
+  )
+}
+
+export const delNotice = (payload) => {
+  const pattern = PathToRegexp.compile(API.NOTICES.CURD);
+  return (
+    Request({
+      url: pattern({ sid: payload.schoolId, aid: payload.associationId, nid: payload.noticeId }),
+      method: 'delete',
+    })
+  )
+}

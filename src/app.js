@@ -41,6 +41,8 @@ class App extends Component {
       'pages/attendances/attendances_list_view',
       'pages/attendances/attendances_view',
       'pages/attendances/create_attendances_view',
+      'pages/notices/notices_list_view',
+      'pages/notices/notice_view',
 
     ],
     window: {

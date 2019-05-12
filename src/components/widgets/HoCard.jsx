@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components'
 import './HoCard.scss'
 import PropTypes from 'prop-types'
-
+import noop from 'lodash.noop'
 class HoCard extends Taro.PureComponent{
   static propTypes = {
     type: PropTypes.string,
@@ -10,11 +10,15 @@ class HoCard extends Taro.PureComponent{
     extra: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
+    author: PropTypes.string,
     manage: PropTypes.bool,
+    onDelClick: PropTypes.func,
   }
   static defaultProps = {
     type: 'normal',
     manage: false,
+    author: '',
+    onDelClick: noop,
   }
   state = {
 
@@ -70,6 +74,8 @@ class HoCard extends Taro.PureComponent{
             {this.props.type === 'attendances' && <View className={'tag ' + `tag_${status.id}`}>
               {status.title}
             </View>}
+            {this.props.type === 'notices' && <View onClick={() => this.props.onDelClick(this.props.extra)} className='delete-button'>
+            </View>}
           </View>
         </View>
         <View className='content'>
@@ -77,7 +83,12 @@ class HoCard extends Taro.PureComponent{
             {this.props.content === "" ? "无详细说明" : this.props.content}
           </View>
           <View className='note'>
-            {this.props.note}
+            <View className='author'>
+              {this.props.author}
+            </View>
+            <View className='item'>
+              {this.props.note}
+            </View>
           </View>
         </View>
       </View>

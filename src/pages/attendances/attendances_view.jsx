@@ -499,6 +499,13 @@ class AttendancesView extends Taro.PureComponent {
             请假原因:
           </View>}
         </View>}
+        {this.props.manage && this.state.isMounted &&  <View className='action'>
+          {(this.state.attendances.status === 1 && this.state.attendances.attendance_status === -1  )&& <View className='button'>
+            <AtButton type='secondary' onClick={this.handleSignClick}>
+              签到
+            </AtButton>
+          </View>}
+        </View>}
         {this.props.manage && this.state.isMounted &&  <AtTabs current={this.state.current} tabList={this.TAB_LIST} onClick={this.handleTabChange.bind(this)}>
             <AtTabsPane current={this.state.current} index={0} >
               <View className='members-list'>

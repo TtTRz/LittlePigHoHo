@@ -1,31 +1,15 @@
-@import'../../assets/scss/color';
-.create-notice-view {
-  .progress-bar{
-    height: 1em;
+@import '../../assets/scss/color';
 
-    position:fixed;
-    width: 100%;
-    background: $white;
-    z-index: 10;
-    left:0;
-    top:0;
-  }
-  .content{
-    margin-top: 1em;
-    .title{
-      font-weight: bold;
-      font-size: 1.1em;
-      color: $grey-8;
-      padding: .5em .7em;
-      padding-top: .8em;
-    }
-    .title-input{
-      padding: 0 .5em;
-      .text-area{
+.notice-editor {
+  .content {
+    margin-top: .5em;
+    .title-input {
+      padding: 0.5em;
+      .text-area {
         padding: 0 .8em;
       }
     }
-    .time-picker{
+    .time-picker {
       padding: 0 .5em;
       .picker{
         position:relative;
@@ -55,16 +39,18 @@
       }
     }
     .address-picker{
-      padding: 0 .5em;
+      padding: 0 .6em;
       font-size: 32rpx;
       .map{
         margin: 2em 0;
-
+        margin-bottom: .5em;
       }
     }
     .submit-button {
       padding: 1em;
-      padding-bottom: 3em;
+      .button {
+        margin: 1em 0;
+      }
     }
   }
 }

@@ -40,7 +40,10 @@ class ActionGridView extends Taro.PureComponent{
         url: url
       })
     } else if(item.key === 'notices') {
-      this.props.onCreateNoticesClick();
+      // this.props.onCreateNoticesClick();
+      Taro.navigateTo({
+        url: '/pages/notices/notices_list_view'
+      })
     } else if (item.key === 'my-department'){
       // if(this.props.)
     } else {

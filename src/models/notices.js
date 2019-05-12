@@ -6,6 +6,7 @@ export default {
   state: {
     notices: {},
     assoNoticesList: [],
+    entity: {},
   },
   effects: {
     *getNoticesList({ payload }, { call, put, select }) {
@@ -37,6 +38,19 @@ export default {
         type:'saveAssoNoticesList',
         payload: data.data,
       })
+    },
+    *getNoticeEntity({ payload }, {call, put, select }) {
+      const req = yield call(notice.getNotice, payload);
+      const { data } = req;
+      yield put({
+        type: 'saveNoticeEntity',
+        payload: data.data,
+      })
+    },
+    *delNotice({ payload }, { call, put, select }) {
+      const req = yield call(notice.delNotice, payload);
+      const { data } = req;
+
     }
   },
   reducers: {
@@ -44,6 +58,12 @@ export default {
       return {
         ...state,
         assoNoticesList: payload,
+      }
+    },
+    saveNoticeEntity(state, { payload }) {
+      return {
+        ...state,
+        entity: payload,
       }
     }
   }

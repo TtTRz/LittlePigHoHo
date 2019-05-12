@@ -23,155 +23,103 @@ class CreateNoticeView extends Taro.PureComponent{
     departmentCheckedList: [],
     content: '',
     title: '',
-    startTimeSel: moment().format('HH:mm'),
-    endTimeSel: moment().format('HH:mm'),
-    startDateSel: moment().format('YYYY-MM-DD'),
-    endDateSel: moment().format('YYYY-MM-DD'),
+    startTimeSel: '未选择',
+    endTimeSel: '未选择',
+    startDateSel: '未选择',
+    endDateSel:'未选择',
     status: 'progress',
   }
-  handleNextClick = () => {
-    const { percent} = this.state;
-    this.setState({
-      percent: percent + 50,
-    })
-  }
-  handlePreClick = () => {
-    const { percent} = this.state;
-    this.setState({
-      percent: percent - 50,
-    })
-  }
+
   handleSubmitClick = () => {
-    const { percent} = this.state;
-    this.setState({
-      percent: percent + 50,
-    }, () => {
-      console.log(this.state)
-      const start = this.state.startDateSel+" "+this.state.startTimeSel+":00";
-      const end = this.state.endDateSel+" "+this.state.endTimeSel+":00";
-      const startMoment = moment(start, 'YYYY-MM-DD HH:mm:ss');
-      const endMoment = moment(end, 'YYYY-MM-DD HH:mm:ss');
-      this.props.dispatch({
-        type: 'notices/addNotices',
-        payload: {
-          title: this.state.title,
-          content: this.state.content,
-          start_time: startMoment.format('X'),
-          end_time: endMoment.format('X'),
-          schoolId: this.props.account.school_id,
-          associationId: this.props.association.id,
+    const start = this.state.startDateSel+" "+this.state.startTimeSel+":00";
+    const end = this.state.endDateSel+" "+this.state.endTimeSel+":00";
+    const startMoment = moment(start, 'YYYY-MM-DD HH:mm:ss');
+    const endMoment = moment(end, 'YYYY-MM-DD HH:mm:ss');
+    this.props.dispatch({
+      type: 'notices/addNotices',
+      payload: {
+        title: this.state.title,
+        content: this.state.content,
+        start_time: startMoment.format('X'),
+        end_time: endMoment.format('X'),
+        schoolId: this.props.account.school_id,
+        associationId: this.props.association.id,
+      }
+    }).then(() => {
+      Taro.showToast('发布成功')
+      this.setState({
+        status: 'success'
+      }, () => {
+        if(!this.props.isLoading) {
+          setTimeout(() => {
+            Taro.redirectTo({
+              url: '/pages/notices/notices_list_view',
+            })
+          }, 1000)
         }
-      }).then(() => {
-        this.setState({
-          status: 'success'
-        }, () => {
-          if(!this.props.isLoading) {
-            setTimeout(() => {
-              Taro.redirectTo({
-                url: '/pages/home/home_view',
-              })
-            }, 1000)
-          }
-        })
       })
+    })
+  }
+  updatePercent = () => {
+    let percent = 0;
+    if(this.state.title !== '') {
+      percent += 30;
+    }
+    if(this.state.content !== '') {
+      percent += 30;
+    }
+    if(this.state.startDateSel !== '未选择') {
+      percent += 10;
+    }
+    if(this.state.startTimeSel !== '未选择') {
+      percent += 10;
+    }
+    if(this.state.endTimeSel !== '未选择') {
+      percent += 10;
+    }
+    if(this.state.endDateSel !== '未选择') {
+      percent += 10;
+    }
+    this.setState({
+      percent: percent,
     })
   }
   handleInputChange = (keyName, value) => {
     this.setState({
-      [keyName]: keyName ==='title' ? value : value.target.value,
+      [keyName]: keyName ==='content' ? value.target.value : value,
+    }, () => {
+      this.updatePercent();
     })
   }
   handlePickerChange = (keyName, e) => {
     this.setState({
       [keyName]: e.detail.value
+    },() => {
+      this.updatePercent();
     })
   }
   render(){
      return (
        <View className='create-notice-view'>
          <View className='progress-bar'>
-           <AtProgress percent={this.state.percent} status={this.state.status} />
+           <View style={{ padding: '.5em'}}>
+             <AtProgress percent={this.state.percent} status={this.state.status} />
+           </View>
          </View>
-         {this.state.percent === 0 && <View className='content'>
-           <View className='body'>
-             <View className='title'>
-               选择时间
-             </View>
-             <View>
-               <Picker mode='date' onChange={this.handlePickerChange.bind(this,'startDateSel')}>
-                 <View className='picker'>
-                   <View className='label'>
-                     开始日期:
-                   </View>
-                   <View className='value'>
-                     {this.state.startDateSel}
-                   </View>
-                 </View>
-               </Picker>
-               <Picker mode='time' onChange={this.handlePickerChange.bind(this,'startTimeSel')}>
-                 <View className='picker'>
-                   <View className='label'>
-                     开始时间:
-                   </View>
-                   <View className='value'>
-                     {this.state.startTimeSel}
-                   </View>
-                 </View>
-               </Picker>
-               <Picker mode='date' onChange={this.handlePickerChange.bind(this,'endDateSel')}>
-                 <View className='picker'>
-                   <View className='label'>
-                     结束日期:
-                   </View>
-                   <View className='value'>
-                     {this.state.endDateSel}
-                   </View>
-                 </View>
-               </Picker>
-               <Picker mode='time' onChange={this.handlePickerChange.bind(this,'endTimeSel')}>
-                 <View className='picker'>
-                   <View className='label'>
-                     结束时间:
-                   </View>
-                   <View className='value'>
-                     {this.state.endTimeSel}
-                   </View>
-                 </View>
-               </Picker>
-             </View>
+         <View className='content'>
+           <View className='title'>
+             通知信息
            </View>
-           <View className='button-bar'>
-             <AtButton
-               disabled={this.state.percent === 0}
-               type='secondary'
-               circle
-               onClick={this.handlePreClick}
-             >
-               上一步
-             </AtButton>
-             <AtButton
-               type='primary'
-               circle
-               onClick={this.handleNextClick}
-             >
-               下一步
-             </AtButton>
-           </View>
-         </View>}
-         {(this.state.percent !== 0 ) && <View className='content'>
-           <View className='body'>
-             <View className='title'>
-               发布通知
-             </View>
-             <View className='input-area'>
-               <AtInput
-                 name='title'
-                 title='标题'
-                 type='text'
-                 placeholder='输入通知标题'
-                 value={this.state.title}
-                 onChange={this.handleInputChange.bind(this, 'title')}
-               />
+           <View className='title-input'>
+             <AtInput
+               name='title'
+               title='标题'
+               type='text'
+               placeholder='输入通知标题'
+               value={this.state.title}
+               onChange={this.handleInputChange.bind(this, 'title')}
+             />
+             <View className='text-area'>
                <AtTextarea
                  value={this.state.content}
                  onChange={this.handleInputChange.bind(this, 'content')}
@@ -180,27 +128,55 @@ class CreateNoticeView extends Taro.PureComponent{
                />
              </View>
            </View>
-           <View className='button-bar'>
-             <AtButton
-               disabled={this.state.percent === 0 || this.state.status === 'success'}
-               type='secondary'
-               circle
-               onClick={this.handlePreClick}
-             >
-               上一步
-             </AtButton>
-             <AtButton
-               disabled={this.state.content === "" || this.state.title === "" || this.state.status === 'success'}
-               type='primary'
-               circle
-               onClick={this.handleSubmitClick}
-               loading={this.props.isLoading}
-             >
-               确 定
-             </AtButton>
+           <View className='title'>
+             持续时间
            </View>
-         </View>}
-
+           <View className='time-picker'>
+             <Picker mode='date' onChange={this.handlePickerChange.bind(this,'startDateSel')}>
+               <View className='picker'>
+                 <View className='label'>
+                   开始日期:
+                 </View>
+                 <View className='value'>
+                   {this.state.startDateSel}
+                 </View>
+               </View>
+             </Picker>
+             <Picker mode='time' onChange={this.handlePickerChange.bind(this,'startTimeSel')}>
+               <View className='picker'>
+                 <View className='label'>
+                   开始时间:
+                 </View>
+                 <View className='value'>
+                   {this.state.startTimeSel}
+                 </View>
+               </View>
+             </Picker>
+             <Picker mode='date' onChange={this.handlePickerChange.bind(this,'endDateSel')}>
+               <View className='picker'>
+                 <View className='label'>
+                   结束日期:
+                 </View>
+                 <View className='value'>
+                   {this.state.endDateSel}
+                 </View>
+               </View>
+             </Picker>
+             <Picker mode='time' onChange={this.handlePickerChange.bind(this,'endTimeSel')}>
+               <View className='picker'>
+                 <View className='label'>
+                   结束时间:
+                 </View>
+                 <View className='value'>
+                   {this.state.endTimeSel}
+                 </View>
+               </View>
+             </Picker>
+           </View>
+           <View className='submit-button'>
+             <AtButton disabled={this.state.percent !== 100 } onClick={this.handleSubmitClick}>{this.state.percent !==100 ? '请先完善信息' : '确认'}</AtButton>
+           </View>
+         </View>
        </View>
      )
   }
